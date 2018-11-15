@@ -4,6 +4,7 @@ export default ({ store, redirect, route }) => {
     let validFlag = false;
     const breadcrumb = [];
     const currentPath = route.path;
+
     store.state.app.menuList.forEach(menu => {
         if (currentPath.indexOf(menu.path) !== -1) {
             breadcrumb.push({
@@ -12,11 +13,11 @@ export default ({ store, redirect, route }) => {
                 name: menu.name
             });
         }
+
         if (menu.children.length) {
             menu.children.forEach(item => {
                 if (item.path === route.path) {
                     validFlag = true;
-
                     breadcrumb.push({
                         title: item.title,
                         path: item.path,

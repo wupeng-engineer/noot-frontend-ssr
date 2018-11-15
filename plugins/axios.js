@@ -1,3 +1,5 @@
+import { Message } from 'iview';
+
 export default function ({ $axios, redirect }) {
     $axios.onRequest(config => {
         console.log(new Date() + 'Making request to ' + config.baseURL + config.url);
@@ -14,7 +16,9 @@ export default function ({ $axios, redirect }) {
                 redirect('/login')
                 break;
             case 400:
-                redirect('/login')
+                if (typeof window !== 'undefined') {
+                    Message.error(data.message);
+                }
                 break;
             case 500:
                 if (typeof window !== window)

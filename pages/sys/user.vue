@@ -719,7 +719,7 @@ export default {
               return;
             }
             this.submitLoading = true;
-            addUser(this.userForm).then(res => {
+            this.$axios.api.addUser(this.userForm).then(res => {
               this.submitLoading = false;
               if (res.message ===  'success') {
                 this.$Message.success("操作成功");
@@ -730,7 +730,7 @@ export default {
           } else {
             // 编辑
             this.submitLoading = true;
-            editUser(this.userForm).then(res => {
+            this.$axios.api.editUser(this.userForm).then(res => {
               this.submitLoading = false;
               if (res.message ===  'success') {
                 this.$Message.success("操作成功");

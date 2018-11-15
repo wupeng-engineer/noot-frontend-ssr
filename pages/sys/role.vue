@@ -409,7 +409,7 @@ export default {
         content: "您确认要删除角色 " + v.name + " ?",
         onOk: () => {
           this.operationLoading = true;
-          this.$axios.deleteRole(v.id).then(res => {
+          this.$axios.api.deleteRole(v.id).then(res => {
             this.operationLoading = false;
             if (res.message === 'success') {
               this.$Message.success("删除成功");
@@ -553,14 +553,13 @@ export default {
         permIds += e.id + ",";
       });
       permIds = permIds.substring(0, permIds.length - 1);
-      this.axios.api.editRolePerm({
+      this.$axios.api.editRolePerm({
         roleId: this.editRolePermId,
         permIds: permIds
       }).then(res => {
         this.submitPermLoading = false;
         if (res.message === 'success') {
           this.$Message.success("操作成功");
-          util.initRouter(this);
           this.getRoleList();
           this.permModalVisible = false;
         }

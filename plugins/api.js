@@ -17,14 +17,14 @@ export default function ({ $axios, store }) {
         const token = store.state.token;
         $axios.defaults.headers.put['Content-Type'] = 'application/json';
         $axios.defaults.headers.put['Authorization'] = `Bearer ${token}`;
-        return $axios.put(url, { data: params });
+        return $axios.put(url, { ...params });
     };
 
     const deleteRequest = (url, params) => {
         const token = store.state.token;
         $axios.defaults.headers.delete['Content-Type'] = 'application/json';
         $axios.defaults.headers.delete['Authorization'] = `Bearer ${token}`;
-        return $axios.delete(url, { params });
+        return $axios.delete(url, { ...params });
     };
 
     $axios.api = {
@@ -62,7 +62,7 @@ export default function ({ $axios, store }) {
             return postRequest('/permission/user/admin', params)
         },
         editUser: (params) => {
-            return postRequest('/user/admin/edit', params)
+            return putRequest('/permission/user/admin', params)
         },
         enableUser: (id, params) => {
             return putRequest(`/permission/user/admin/enable/${id}`, params)
