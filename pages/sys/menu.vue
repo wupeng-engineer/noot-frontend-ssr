@@ -185,7 +185,7 @@
 import util from "~/libs/util.js";
 export default {
     layout: 'sys',
-  name: "menu",
+  name: "menus",
   data() {
     return {
       loading: true,

@@ -1,6 +1,5 @@
 export default function ({ $axios, store }) {
     const getRequest = (url, params) => {
-        console.log(params);
         const token = store.state.token;
         $axios.defaults.headers.get['Content-Type'] = 'application/json';
         $axios.defaults.headers.get['Authorization'] = `Bearer ${token}`;

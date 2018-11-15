@@ -77,8 +77,6 @@ export default {
                     })
                 }
             })
-
-            console.log(name, path);
             this.$router.push({ path });
         }
     }

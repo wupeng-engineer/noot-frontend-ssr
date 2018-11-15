@@ -13,7 +13,7 @@
         </div>
         <div class="header-middle-con">
           <div class="main-breadcrumb">
-            <breadcrumb-nav :currentPath="currentPath"></breadcrumb-nav>
+            <breadcrumb-nav></breadcrumb-nav>
           </div>
         </div>
         <div class="header-avator-con">
@@ -64,6 +64,7 @@ import Cookies from "js-cookie";
 import util from "~/libs/util.js";
 
 export default {
+    middleware: 'permission',
     layout: 'sys',
   components: {
     shrinkableMenu,
@@ -115,14 +116,6 @@ export default {
   },
   methods: {
     init() {
-      let pathArr = util.setCurrentPath(this, this.$route.name);
-      // this.$store.commit("updateMenulist");
-      if (pathArr.length >= 2) {
-        this.$store.commit("addOpenSubmenu", pathArr[1].name);
-      }
-      let userInfo = JSON.parse(Cookies.get("userInfo"));
-      this.username = userInfo.username;
-      this.userId = userInfo.id;
       this.checkTag(this.$route.name);
     },
     toggleClick() {
@@ -183,27 +176,9 @@ export default {
       // console.log(isFullScreen);
     }
   },
-  watch: {
-    $route(to) {
-      this.$store.commit("setCurrentPageName", to.name);
-      let pathArr = util.setCurrentPath(this, to.name);
-      if (pathArr.length > 2) {
-        this.$store.commit("addOpenSubmenu", pathArr[1].name);
-      }
-      this.checkTag(to.name);
-      localStorage.currentPageName = to.name;
-    },
-    lang() {
-      util.setCurrentPath(this, this.$route.name); // 在切换语言时用于刷新面包屑
-    }
-  },
   mounted() {
     this.init();
-    this.$store.commit("setOpenedList");
   },
-  created() {
-    // 显示打开的页面的列表
-  }
 };
 </script>
 

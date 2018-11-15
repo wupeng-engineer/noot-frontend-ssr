@@ -51,23 +51,6 @@ util.handleTitle = function (vm, item) {
     }
 };
 
-util.setCurrentPath = function (vm, name) {
-    let title = '';
-    let isOtherRouter = false;
-
-    const currentPathArr = [
-        {
-            title: '首页',
-            path: '/sys',
-            name: 'sys'
-        },
-    ];
-    
-    vm.$store.commit('setCurrentPath', currentPathArr);
-
-    return currentPathArr;
-};
-
 util.openNewPage = function (vm, name, argu, query) {
     let pageOpenedList = vm.$store.state.app.pageOpenedList;
     let openedPageLen = pageOpenedList.length;
