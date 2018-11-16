@@ -122,21 +122,20 @@ export default {
               password: this.form.password,
               saveLogin: this.saveLogin
             }).then(res => {
+                console.log(this.$store.state.user);
+                console.log(res);
               if (res.message === 'success') {
                 this.$store.commit("setToken", res.data.access_token);
-                Cookies.set("access_token", res.data.access_token, {
-                  expires: 7
-                });
+                if (this.saveLogin) {
+                    Cookies.set("access_token", res.data.access_token, {
+                      expires: 7
+                    });
+                }
                 // 获取用户信息
                 this.$axios.api.userInfo().then(res => {
                   if (res.message ===  'success') {
                     // 避免超过大小限制
                     delete res.data.permissions;
-                    if (this.saveLogin) {
-                      // 保存7天
-                    } else {
-                      Cookies.set("access_token", JSON.stringify(res.data.access_token));
-                    }
                     this.$store.commit('setInfo', res.data);
                     this.$router.push({ name: "/sys/user" });
                   } else {

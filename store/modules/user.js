@@ -10,6 +10,8 @@ const user = {
         logout (state, vm) {
             Cookies.remove('access_token');
             state.info = {};
+            state.token = '';
+            state.tokenValid = true;
         },
         setInfo (state, info) {
             state.info = info;
