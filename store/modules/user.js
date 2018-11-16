@@ -12,7 +12,6 @@ const user = {
             state.info = {};
         },
         setInfo (state, info) {
-            console.log(info);
             state.info = info;
         },
         setToken (state, token) {

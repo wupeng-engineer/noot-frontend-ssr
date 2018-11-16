@@ -1,27 +1,27 @@
 export default function ({ $axios, store }) {
     const getRequest = (url, params) => {
-        const token = store.state.token;
+        const token = store.state.user.token;
         $axios.defaults.headers.get['Content-Type'] = 'application/json';
         $axios.defaults.headers.get['Authorization'] = `Bearer ${token}`;
         return $axios.get(url, { params: { ...params }});
     };
 
     const postRequest = (url, params) => {
-        const token = store.state.token;
+        const token = store.state.user.token;
         $axios.defaults.headers.post['Content-Type'] = 'application/json';
         $axios.defaults.headers.post['Authorization'] = `Bearer ${token}`;
         return $axios.post(url, { ...params });
     };
 
     const putRequest = (url, params) => {
-        const token = store.state.token;
+        const token = store.state.user.token;
         $axios.defaults.headers.put['Content-Type'] = 'application/json';
         $axios.defaults.headers.put['Authorization'] = `Bearer ${token}`;
         return $axios.put(url, { ...params });
     };
 
     const deleteRequest = (url, params) => {
-        const token = store.state.token;
+        const token = store.state.user.token;
         $axios.defaults.headers.delete['Content-Type'] = 'application/json';
         $axios.defaults.headers.delete['Authorization'] = `Bearer ${token}`;
         return $axios.delete(url, { ...params });

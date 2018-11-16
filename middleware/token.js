@@ -35,6 +35,7 @@ export default function ({ app, req, res, store, redirect, route }) {
                 store.commit('setTokenValid', true);
                 // 加载菜单
                 if (store.state.app.menuList.length > 0) return;
+                console.log(1231312313);
                 return $axios.api.getMenuList().then(res => {
                     let menuData = res.data || [];
                     const constRoutes = [];
