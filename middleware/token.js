@@ -1,4 +1,4 @@
-export default function({ app, req, res, store, redirect }) {
+export default function({ app, req, res, store, redirect, route }) {
     const userInfo = store.state.user.info;
     let token = '';
     // 如果是server
@@ -20,8 +20,9 @@ export default function({ app, req, res, store, redirect }) {
     app.$axios.defaults.timeout = 15000;
 
     // 如果token存在 但是 没有用户信息
-    const currentPath = app.router.history.current.path;
-    if (!userInfo.id && currentPath.indexOf('_nuxt') === -1 && store.state.tokenValid) {
+    const currentPath = route.path;
+
+    if (!userInfo.id && store.state.tokenValid && token) {
         return app.$axios.api.userInfo().then(res => {
             if (res.message !== 'success') {
                 if (currentPath !== '/login') {

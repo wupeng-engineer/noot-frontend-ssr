@@ -3,7 +3,6 @@ export default ({ $axios, store, redirect, app, $router, route }) => {
     // 加载菜单
     if (!store.state.user.info.id) return;
     if (store.state.app.menuList.length > 0) return;
-
     return $axios.api.getMenuList().then(res => {
         let menuData = res.data || [];
         const constRoutes = [];
@@ -19,6 +18,6 @@ export default ({ $axios, store, redirect, app, $router, route }) => {
             }
         });
         store.commit('setTagsList', tagsList);
-        return;
+        redirect('/sys/user')
     });
 }

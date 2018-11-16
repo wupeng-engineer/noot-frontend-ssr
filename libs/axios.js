@@ -16,7 +16,6 @@ axios.interceptors.request.use(config => {
 // http response 拦截器
 axios.interceptors.response.use(response => {
     if (!response) return;
-    console.log(response, '############');
     const data = response.data;
 
     // 根据返回的code值来做不同的处理(和后端约定)
@@ -24,8 +23,7 @@ axios.interceptors.response.use(response => {
         case 401:
             if (typeof window === 'undefined') return;
             // 未登录 清除已登录状态
-            Cookies.set('userInfo', '');
-            setStore('accessToken', '');
+            Cookies.remove('access_token');
             router.push('/login');
             break;
         case 403:

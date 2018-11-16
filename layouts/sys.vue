@@ -28,14 +28,14 @@
             <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
               <Dropdown transfer trigger="hover" @on-click="handleClickUserDropdown">
                 <a href="javascript:void(0)">
-                  <span class="main-user-name">{{ username }}</span>
+                  <span class="main-user-name">{{ this.$store.state.user.info.username }}</span>
                   <Icon type="md-arrow-dropdown" />
-                  <Avatar :src="this.$store.state.user.info.avatar" style="background: #619fe7;margin-left: 10px;"></Avatar>
+                  <Avatar :src="this.$store.state.user.info.avatar"></Avatar>
                 </a>
                 <DropdownMenu slot="list">
                   <DropdownItem name="ownSpaceOld"> 用户中心 </DropdownItem>
                   <DropdownItem name="changePass"> 修改密码 </DropdownItem>
-                  <DropdownItem name="loginout" divided> 退出登录 </DropdownItem>
+                  <DropdownItem name="loginout"> 退出登录 </DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </Row>
@@ -84,6 +84,9 @@ export default {
     };
   },
   computed: {
+      logout() {
+          
+      },
     menuList() {
       return this.$store.state.app.menuList;
     },
@@ -136,15 +139,9 @@ export default {
         this.$router.push({
           name: "ownspace_old"
         });
-      } else if (name === "changePass") {
-        util.openNewPage(this, "change_pass");
-        this.$router.push({
-          name: "change_pass"
-        });
       } else if (name === "loginout") {
         // 退出登录
-        this.$store.commit("logout", this);
-        this.$store.commit("clearOpenedSubmenu");
+        this.$store.commit("logout");
         // 强制刷新页面 重新加载router
         location.reload();
       }

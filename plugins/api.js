@@ -29,7 +29,7 @@ export default function ({ $axios, store }) {
 
     $axios.api = {
         login: (params) => {
-            return postRequest('/passport/token/by/code', params)
+            return postRequest('/passport/token', params)
         },
         userInfo: (params) => {
             return getRequest('/account/info', params)
