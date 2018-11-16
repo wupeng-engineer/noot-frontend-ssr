@@ -1,4 +1,5 @@
-export default function({ app, req, res, store, redirect, route }) {
+import util from '~/libs/util'
+export default function ({ app, req, res, store, redirect, route }) {
     const userInfo = store.state.user.info;
     let token = '';
     // 如果是server
@@ -32,6 +33,25 @@ export default function({ app, req, res, store, redirect, route }) {
             } else {
                 store.commit('setInfo', res.data);
                 store.commit('setTokenValid', true);
+                // 加载菜单
+                if (store.state.app.menuList.length > 0) return;
+                return $axios.api.getMenuList().then(res => {
+                    let menuData = res.data || [];
+                    const constRoutes = [];
+                    util.initRouterNode(constRoutes, menuData);
+                    store.commit('updateMenulist', constRoutes.filter(item => item.children.length > 0));
+
+                    let tagsList = [];
+                    store.state.app.routers.map((item) => {
+                        if (item.children.length <= 1) {
+                            tagsList.push(item.children[0]);
+                        } else {
+                            tagsList.push(...item.children);
+                        }
+                    });
+                    store.commit('setTagsList', tagsList);
+                    redirect('/sys/user')
+                });
             }
         });
     }

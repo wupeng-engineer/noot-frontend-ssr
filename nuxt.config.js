@@ -74,6 +74,6 @@ module.exports = {
         }
     },
     router: {
-        middleware: [ 'token', 'nav' ],
+        middleware: [ 'token' ],
     }
 }

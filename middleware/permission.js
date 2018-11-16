@@ -1,4 +1,3 @@
-import util from '~/libs/util'
 export default ({ store, redirect, route }) => {
     // 判断是否有权限
     let validFlag = false;
