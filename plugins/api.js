@@ -1,4 +1,5 @@
 export default function ({ $axios, store }) {
+    $axios.defaults.timeout = 15000;
     const getRequest = (url, params) => {
         const token = store.state.user.token;
         $axios.defaults.headers.get['Content-Type'] = 'application/json';

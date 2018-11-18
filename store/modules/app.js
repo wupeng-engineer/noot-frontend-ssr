@@ -37,6 +37,9 @@ const app = {
         updateMenulist(state, routes) {
             state.menuList = routes;
         },
+        removeMenuList(state, roues) {
+            state.menuList = [];
+        },
         addOpenSubmenu(state, name) {
             let hasThisName = false;
             let isEmpty = false;
