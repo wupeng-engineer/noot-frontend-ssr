@@ -79,7 +79,7 @@
 import util from "~/libs/util.js";
 import circleLoading from "~/components/circle-loading.vue";
 export default {
-    layout: 'sys',
+    layout: 'permission',
   name: "role",
   components: {
     circleLoading

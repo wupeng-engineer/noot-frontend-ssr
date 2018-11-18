@@ -5,69 +5,34 @@
                 <Card>
                     <Row>
                         <Form ref="searchForm" :model="searchForm" inline :label-width="70" class="search-form">
-                            <Form-item label="用户名称" prop="username">
-                              <Input type="text" v-model="searchForm.username" clearable placeholder="请输入用户名" style="width: 200px"/>
+                            <Form-item label="姓名" prop="username">
+                              <Input type="text" v-model="searchForm.username" clearable placeholder="请输入用户名" style="width: 150px"/>
                             </Form-item>
-                            <Form-item label="部门" prop="department">
-                              <Cascader v-model="selectDep" :data="department" :load-data="loadData" @on-change="handleChangeDep" change-on-select filterable placeholder="请选择或输入搜索部门" style="width: 200px"></Cascader>
+                            <Form-item label="身份证号" prop="department">
+                              <Input type="text" v-model="selectDep" placeholder="输入身份证号" style="width: 350px"></Input>
                             </Form-item>
-                            <span v-if="drop">
-                            <Form-item label="手机号" prop="phone">
+                            <Form-item label="电话号码" prop="phone">
                               <Input type="text" v-model="searchForm.phone" clearable placeholder="请输入手机号" style="width: 200px"/>
                             </Form-item>
-                              <Form-item label="邮箱" prop="email">
-                                <Input type="text" v-model="searchForm.email" clearable placeholder="请输入邮箱" style="width: 200px"/>
-                              </Form-item>
-                              <Form-item label="性别" prop="sex">
-                                <Select v-model="searchForm.sex" placeholder="请选择" clearable style="width: 200px">
-                                  <Option value="0">女</Option>
-                                  <Option value="1">男</Option>
-                                </Select>
-                              </Form-item>
-                              <Form-item label="用户类型" prop="type">
-                                <Select v-model="searchForm.type" placeholder="请选择" clearable style="width: 200px">
-                                  <Option value="0">普通用户</Option>
-                                  <Option value="1">管理员</Option>
-                                </Select>
-                              </Form-item>
-                              <Form-item label="用户状态" prop="status">
-                                <Select v-model="searchForm.status" placeholder="请选择" clearable style="width: 200px">
-                                  <Option value="0">正常</Option>
-                                  <Option value="-1">禁用</Option>
-                                </Select>
-                              </Form-item>
-                              <Form-item label="创建时间">
-                                <DatePicker v-model="selectDate" type="daterange" format="yyyy-MM-dd" clearable @on-change="selectDateRange" placeholder="选择起始时间" style="width: 200px"></DatePicker>
-                              </Form-item>
-                            </span>
                             <Form-item style="margin-left:-35px;" class="br">
                               <Button @click="handleSearch" type="primary" icon="ios-search">搜索</Button>
                               <Button @click="handleReset" >重置</Button>
-                              <a class="drop-down" @click="dropDown">{{dropDownContent}}
-                                <Icon :type="dropDownIcon"></Icon>
-                              </a>
                             </Form-item>
                         </Form>
                     </Row>
                     <Row class="operation">
-                        <Button @click="add" type="primary" icon="md-add">添加用户</Button>
-                        <Button @click="delAll" icon="md-trash">批量删除</Button>
-                        <Dropdown @on-click="handleDropdown">
-                          <Button>
-                              更多操作
-                              <Icon type="md-arrow-dropdown" />
-                          </Button>
-                          <DropdownMenu slot="list">
-                              <DropdownItem name="refresh">刷新</DropdownItem>
-                          </DropdownMenu>
-                        </Dropdown>
-                        <circleLoading v-if="operationLoading"/>
-                    </Row>
-                    <Row>
-                        <Alert show-icon>
-                            已选择 <span class="select-count">{{selectCount}}</span> 项
-                            <a class="select-clear" @click="clearSelectAll">清空</a>
-                        </Alert>
+                        <Upload :action="this.$store.state.app.uploadUrl"
+                          :headers="{Authorization: `bearer ${this.$store.state.user.token}`}" 
+                          :on-success="handleSuccess"
+                          :on-error="handleError"
+                          :format="['xlsx']"
+                          :max-size="512000000"
+                          :on-format-error="handleFormatError"
+                          :on-exceeded-size="handleMaxSize"
+                          ref="up"
+                          class="upload">
+                            <Button icon="ios-cloud-upload-outline">数据上传</Button>
+                        </Upload>
                     </Row>
                     <Row>
                         <Table :loading="loading" border :columns="columns" :data="data" sortable="custom" @on-sort-change="changeSort" @on-selection-change="showSelect" ref="table"></Table>
@@ -143,13 +108,10 @@
 </template>
 
 <script>
-import circleLoading from "~/components/circle-loading.vue";
+
 export default {
     layout: 'permission',
   name: "user-manage",
-  components: {
-    circleLoading,
-  },
   data() {
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
@@ -227,12 +189,6 @@ export default {
       },
       submitLoading: false,
       columns: [
-        {
-          type: "selection",
-          width: 60,
-          align: "center",
-          fixed: "left"
-        },
         {
           type: "index",
           width: 60,
@@ -759,13 +715,6 @@ export default {
         title: "文件大小过大",
         desc: "所选文件‘ " + file.name + " ’大小过大, 不得超过 5M."
       });
-    },
-    beforeUpload() {
-      if (!this.$route.meta.permTypes.includes("upload")) {
-        this.$Message.error("此处您没有上传权限(为演示功能，该按钮未配置隐藏)");
-        return false;
-      }
-      return true;
     },
     handleSuccess(res, file) {
       if (res.message ===  'success') {

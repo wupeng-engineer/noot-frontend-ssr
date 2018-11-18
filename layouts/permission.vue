@@ -17,13 +17,6 @@
           </div>
         </div>
         <div class="header-avator-con">
-          <Dropdown @on-click="handleLanDropdown" class="options">
-            <Icon type="md-globe" :size="24" class="language"></Icon>
-            <DropdownMenu slot="list">
-              <DropdownItem name="zh-CN">中文</DropdownItem>
-              <DropdownItem name="en-US">English</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
           <div class="user-dropdown-menu-con">
             <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
               <Dropdown transfer trigger="hover" @on-click="handleClickUserDropdown">
@@ -65,7 +58,7 @@ import util from "~/libs/util.js";
 
 export default {
     middleware: 'permission',
-    layout: 'sys',
+    layout: 'permission',
   components: {
     shrinkableMenu,
     tagsPageOpened,
