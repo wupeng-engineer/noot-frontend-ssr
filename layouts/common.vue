@@ -64,8 +64,7 @@ import Cookies from "js-cookie";
 import util from "~/libs/util.js";
 
 export default {
-    middleware: 'permission',
-    layout: 'sys',
+    layout: 'common',
   components: {
     shrinkableMenu,
     tagsPageOpened,

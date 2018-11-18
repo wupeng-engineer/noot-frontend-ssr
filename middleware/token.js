@@ -23,6 +23,8 @@ export default function ({ app, req, res, store, redirect, route }) {
     } else {
         token = store.state.token;
     }
+
+    console.log(userInfo, token);
     if (!userInfo.id) {
         return app.$axios.api.userInfo().then(res => {
             if (res.message !== 'success') {

@@ -122,8 +122,6 @@ export default {
               password: this.form.password,
               saveLogin: this.saveLogin
             }).then(res => {
-                console.log(this.$store.state.user);
-                console.log(res);
               if (res.message === 'success') {
                 this.$store.commit("setToken", res.data.access_token);
                 if (this.saveLogin) {

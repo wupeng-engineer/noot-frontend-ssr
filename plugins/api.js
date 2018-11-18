@@ -65,6 +65,9 @@ export default function ({ $axios, store }) {
         editUser: (params) => {
             return putRequest('/permission/user/admin', params)
         },
+        userUpdatePassword: (params) => {
+            return putRequest('/user/password', params)
+        },
         enableUser: (id, params) => {
             return putRequest(`/permission/user/admin/enable/${id}`, params)
         },

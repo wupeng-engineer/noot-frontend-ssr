@@ -1,6 +1,6 @@
 import { Message } from 'iview';
 
-export default function ({ $axios, redirect }) {
+export default function ({ $axios, redirect, store }) {
     $axios.onRequest(config => {
         console.log(new Date() + 'Making request to ' + config.baseURL + config.url);
     })
@@ -13,6 +13,8 @@ export default function ({ $axios, redirect }) {
         // 根据返回的code值来做不同的处理(和后端约定)
         switch (code) {
             case 401:
+                store.commit('logout');
+                store.commit('removeMenuList');
                 redirect('/login')
                 break;
             case 400:
