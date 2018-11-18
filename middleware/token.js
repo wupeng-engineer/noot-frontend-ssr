@@ -24,13 +24,15 @@ export default function ({ app, req, res, store, redirect, route }) {
         token = store.state.token;
     }
 
-    console.log(userInfo, token);
+    if (userInfo.id && store.state.app.menuList.length) {
+        if (currentPath === '/login') return redirect('/sys/user');
+    }
     if (!userInfo.id) {
         return app.$axios.api.userInfo().then(res => {
             if (res.message !== 'success') {
                 if (currentPath !== '/login') {
                     store.commit('setTokenValid', false);
-                    redirect('/login');
+                    return redirect('/login');
                 }
             } else {
                 store.commit('setInfo', res.data);
@@ -55,7 +57,7 @@ export default function ({ app, req, res, store, redirect, route }) {
                 }
             });
             store.commit('setTagsList', tagsList);
-            redirect('/sys/user')
+            return redirect('/sys/user')
         });
     }
 }

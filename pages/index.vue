@@ -1,16 +1,14 @@
 <template>
 </template>
-
 <script>
 import Logo from '~/components/Logo.vue'
-
 export default {
-  components: {
-    Logo
+  components: { Logo },
+  beforeCreate() {
+      this.$router.push({ path: '/login' })
   }
 }
 </script>
-
 <style>
 
 .container {
