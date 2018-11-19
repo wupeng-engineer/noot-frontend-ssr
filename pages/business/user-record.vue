@@ -5,11 +5,11 @@
                 <Card>
                     <Row>
                         <Form ref="searchForm" :model="searchForm" inline :label-width="70" class="search-form">
-                            <Form-item label="姓名" prop="username">
-                              <Input type="text" v-model="searchForm.username" clearable placeholder="请输入用户名" style="width: 150px"/>
+                            <Form-item label="姓名" prop="realname">
+                              <Input type="text" v-model="searchForm.realname" clearable placeholder="请输入用户名" style="width: 150px"/>
                             </Form-item>
-                            <Form-item label="身份证号" prop="department">
-                              <Input type="text" v-model="selectDep" placeholder="输入身份证号" style="width: 350px"></Input>
+                            <Form-item label="身份证号" prop="idcard">
+                              <Input type="text" v-model="searchForm.idcard" placeholder="输入身份证号" style="width: 350px"/>
                             </Form-item>
                             <Form-item label="电话号码" prop="phone">
                               <Input type="text" v-model="searchForm.phone" clearable placeholder="请输入手机号" style="width: 200px"/>
@@ -145,7 +145,7 @@ export default {
       dataDep: [],
       searchKey: "",
       searchForm: {
-        username: "",
+        realname: "",
         departmentId: "",
         phone: "",
         email: "",
@@ -196,29 +196,17 @@ export default {
           fixed: "left"
         },
         {
-          title: "用户名",
-          key: "username",
-          width: 145,
+          title: "姓名",
+          key: "realname",
+          width: 100,
           sortable: true,
           fixed: "left"
         },
         {
-          title: "头像",
-          key: "avatar",
-          width: 80,
-          align: "center",
-          render: (h, params) => {
-            return h("Avatar", {
-              props: {
-                src: params.row.avatar
-              }
-            });
-          }
-        },
-        {
-          title: "所属部门",
-          key: "departmentTitle",
-          width: 120
+          title: "身份证",
+          key: "idcard",
+          fixed: "left",
+          width: 250
         },
         {
           title: "手机",
@@ -230,217 +218,59 @@ export default {
           }
         },
         {
-          title: "邮箱",
-          key: "email",
-          width: 180,
+          title: "违约金额",
+          key: "money",
+          width: 100,
           sortable: true
         },
         {
-          title: "性别",
-          key: "sex",
-          width: 70,
-          align: "center",
-          render: (h, params) => {
-            let re = "";
-            if (params.row.sex === 1) {
-              re = "男";
-            } else if (params.row.sex === 0) {
-              re = "女";
-            }
-            return h("div", re);
-          }
-        },
-        {
-          title: "用户类型",
-          key: "type",
-          align: "center",
-          width: 100,
-          render: (h, params) => {
-            let re = "";
-            if (params.row.type === 1) {
-              re = "管理员";
-            } else if (params.row.type === 0) {
-              re = "普通用户";
-            }
-            return h("div", re);
-          }
-        },
-        {
-          title: "状态",
-          key: "status",
-          align: "center",
-          width: 140,
-          render: (h, params) => {
-            let re = "";
-            if (params.row.status === 0) {
-              return h("div", [
-                h(
-                  "Tag",
-                  {
-                    props: {
-                      type: "dot",
-                      color: "success"
-                    }
-                  },
-                  "正常启用"
-                )
-              ]);
-            } else if (params.row.status === -1) {
-              return h("div", [
-                h(
-                  "Tag",
-                  {
-                    props: {
-                      type: "dot",
-                      color: "error"
-                    }
-                  },
-                  "禁用"
-                )
-              ]);
-            }
-          },
-          filters: [
-            {
-              label: "正常启用",
-              value: 0
-            },
-            {
-              label: "禁用",
-              value: -1
-            }
-          ],
-          filterMultiple: false,
-          filterMethod(value, row) {
-            if (value === 0) {
-              return row.status === 0;
-            } else if (value === -1) {
-              return row.status === -1;
-            }
-          }
-        },
-        {
-          title: "创建时间",
-          key: "created_at",
+          title: "违约时间",
+          key: "discredit_date",
           sortable: true,
           sortType: "desc",
-          width: 150
+          width: 200
+        },
+        {
+          title: "违约次数",
+          key: "discredit_times",
+          sortable: true,
+          sortType: "desc",
+          width: 100
+        },
+        {
+          title: "数据提供者",
+          key: "create_user_id",
+          sortable: true,
+          sortType: "desc",
+          width: 100
         },
         {
           title: "操作",
           key: "action",
-          width: 200,
+          width: 100,
           align: "center",
           fixed: "right",
           render: (h, params) => {
-            if (params.row.status === 0) {
-              return h("div", [
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small"
-                    },
-                    style: {
-                      marginRight: "5px"
-                    },
-                    on: {
-                      click: () => {
-                        this.edit(params.row);
-                      }
-                    }
+            return h("div", [
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "primary",
+                    size: "small"
                   },
-                  "编辑"
-                ),
-                h(
-                  "Button",
-                  {
-                    props: {
-                      size: "small"
-                    },
-                    style: {
-                      marginRight: "5px"
-                    },
-                    on: {
-                      click: () => {
-                        this.disable(params.row);
-                      }
-                    }
+                  style: {
+                    marginRight: "5px"
                   },
-                  "禁用"
-                ),
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "error",
-                      size: "small"
-                    },
-                    on: {
-                      click: () => {
-                        this.remove(params.row);
-                      }
+                  on: {
+                    click: () => {
+                      this.edit(params.row);
                     }
-                  },
-                  "删除"
-                )
-              ]);
-            } else {
-              return h("div", [
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small"
-                    },
-                    style: {
-                      marginRight: "5px"
-                    },
-                    on: {
-                      click: () => {
-                        this.edit(params.row);
-                      }
-                    }
-                  },
-                  "编辑"
-                ),
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "success",
-                      size: "small"
-                    },
-                    style: {
-                      marginRight: "5px"
-                    },
-                    on: {
-                      click: () => {
-                        this.enable(params.row);
-                      }
-                    }
-                  },
-                  "启用"
-                ),
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "error",
-                      size: "small"
-                    },
-                    on: {
-                      click: () => {
-                        this.remove(params.row);
-                      }
-                    }
-                  },
-                  "删除"
-                )
-              ]);
-            }
+                  }
+                },
+                "编辑"
+              ),
+            ]);
           }
         }
       ],
@@ -608,7 +438,13 @@ export default {
     getUserList() {
       // 多条件搜索用户列表
       this.loading = true;
-      this.$axios.api.getUserListData(this.searchForm).then(res => {
+      this.$axios.api.userRecordList({
+          page: this.searchForm.pageNumber,
+          pageSize: this.searchForm.pageSize,
+          realname: this.searchForm.realname,
+          idcard: this.searchForm.idcard,
+          phone: this.searchForm.phone
+      }).then(res => {
         this.loading = false;
         if (res.message ===  'success') {
           this.data = res.data.list;
@@ -719,7 +555,8 @@ export default {
     handleSuccess(res, file) {
       if (res.message ===  'success') {
         file.url = res.data;
-        this.userForm.avatar = res.data;
+        this.$Message.success(`成功上传${res.data}条数据`);
+        this.getUserList();
       } else {
         this.$Message.error(res.message);
       }

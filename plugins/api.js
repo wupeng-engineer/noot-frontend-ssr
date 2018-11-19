@@ -149,5 +149,8 @@ export default function ({ $axios, store }) {
         searchPermission: (params) => {
             return getRequest('/permission/menu/search', params)
         },
+        userRecordList: (params) => {
+            return getRequest('/business/user/record', params);
+        }
     }
 }
