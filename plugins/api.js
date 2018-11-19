@@ -18,6 +18,7 @@ export default function ({ $axios, store }) {
         const token = store.state.user.token;
         $axios.defaults.headers.put['Content-Type'] = 'application/json';
         $axios.defaults.headers.put['Authorization'] = `Bearer ${token}`;
+        console.log(params);
         return $axios.put(url, { ...params });
     };
 

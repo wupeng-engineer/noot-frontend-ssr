@@ -98,6 +98,9 @@
                     <Radio :label="0">女</Radio>
                   </RadioGroup>
                 </FormItem>
+                <FormItem label="积分" prop="record">
+                    <Input v-model="userForm.record"/>
+                </FormItem>
                 <Form-item label="所属部门" prop="departmentTitle">
                   <Poptip trigger="click" placement="right" title="选择部门" width="250">
                     <div style="display:flex;">
@@ -202,6 +205,7 @@ export default {
       userModalVisible: false,
       modalTitle: "",
       userForm: {
+        record: 0,
         sex: 1,
         type: 0,
         avatar: "https://s1.ax1x.com/2018/05/19/CcdVQP.png",
@@ -247,24 +251,6 @@ export default {
           fixed: "left"
         },
         {
-          title: "头像",
-          key: "avatar",
-          width: 80,
-          align: "center",
-          render: (h, params) => {
-            return h("Avatar", {
-              props: {
-                src: params.row.avatar
-              }
-            });
-          }
-        },
-        {
-          title: "所属部门",
-          key: "departmentTitle",
-          width: 120
-        },
-        {
           title: "手机",
           key: "phone",
           width: 115,
@@ -278,6 +264,11 @@ export default {
           key: "email",
           width: 180,
           sortable: true
+        },
+        {
+          title: "剩余积分",
+          key: "record",
+          width: 120,
         },
         {
           title: "性别",
@@ -729,6 +720,7 @@ export default {
             });
           } else {
             // 编辑
+            console.log(this.userForm);
             this.submitLoading = true;
             this.$axios.api.editUser(this.userForm).then(res => {
               this.submitLoading = false;
