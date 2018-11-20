@@ -789,6 +789,7 @@ export default {
       let str = JSON.stringify(v);
       let userInfo = JSON.parse(str);
       this.userForm = userInfo;
+      delete this.userForm.access_token;
       let selectRolesId = [];
       this.userForm.roles.forEach(function(e) {
         selectRolesId.push(e.id);
