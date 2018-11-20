@@ -4,7 +4,7 @@ export default ({ store, redirect, route }) => {
     const breadcrumb = [];
     const currentPath = route.path;
 
-    store.state.app.menuList.forEach(menu => {
+    store.state.user.menuList.forEach(menu => {
         if (currentPath.indexOf(menu.path) !== -1) {
             breadcrumb.push({
                 title: menu.title,

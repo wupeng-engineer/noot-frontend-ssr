@@ -88,7 +88,7 @@ export default {
           
       },
     menuList() {
-      return this.$store.state.app.menuList;
+      return this.$store.state.user.menuList;
     },
     pageTagsList() {
       return this.$store.state.app.pageOpenedList; // 打开的页面的页面对象

@@ -36,7 +36,7 @@ export default {
   computed: {
      openMenuParentName: function() {
          let name = "sys";
-         this.$store.state.app.menuList.forEach(menu => {
+         this.$store.state.user.menuList.forEach(menu => {
              if (menu.children.length) {
                  menu.children.forEach(item => {
                      if (item.path === this.$route.path) {

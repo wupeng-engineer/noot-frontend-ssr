@@ -4,13 +4,18 @@ const user = {
     state: {
         info: {},
         token: '',
+        menuList: [],
         tokenValid: true
     },
     mutations: {
+        setMenulist(state, routes) {
+            state.menuList = routes;
+        },
         logout (state, vm) {
             Cookies.remove('access_token');
             state.info = {};
             state.token = '';
+            state.menuList = [];
             state.tokenValid = true;
         },
         setInfo (state, info) {

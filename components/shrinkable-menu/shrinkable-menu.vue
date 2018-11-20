@@ -67,7 +67,7 @@ export default {
         handleChange (name) {
             // 找到name对应的path
             let path = '/404';
-            this.$store.state.app.menuList.forEach(menu => {
+            this.$store.state.user.menuList.forEach(menu => {
                 if (menu.children.length) {
                     menu.children.forEach(item => {
                         if (item.name === name) {
