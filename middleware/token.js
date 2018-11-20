@@ -46,6 +46,8 @@ export default function ({ app, req, res, store, redirect, route }) {
             let menuData = res.data || [];
             const constRoutes = [];
             util.initRouterNode(constRoutes, menuData);
+
+            
             store.commit('updateMenulist', constRoutes.filter(item => item.children.length > 0));
 
             let tagsList = [];

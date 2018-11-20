@@ -381,9 +381,8 @@ export default {
             this.submitLoading = false;
             if (res.message === 'success') {
               this.$Message.success("编辑成功");
-              util.initRouter(this);
-              this.init();
               this.menuModalVisible = false;
+              this.init();
             }
           });
         }
@@ -408,9 +407,8 @@ export default {
             this.submitLoading = false;
             if (res.message === 'success') {
               this.$Message.success("添加成功");
-              util.initRouter(this);
-              this.init();
               this.menuModalVisible = false;
+              this.init();
             }
           });
         }

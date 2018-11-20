@@ -30,43 +30,43 @@ export default function ({ $axios, store }) {
 
     $axios.api = {
         login: (params) => {
-            return postRequest('/passport/token', params)
+            return postRequest('/api/v1/passport/token', params)
         },
         userInfo: (params) => {
-            return getRequest('/account/info', params)
+            return getRequest('/api/v1/account/info', params)
         },
         regist: (params) => {
-            return postRequest('/account/register', params)
+            return postRequest('/api/v1/account/register', params)
         },
         initCaptcha: (params) => {
-            return getRequest('/common/captcha/init', params)
+            return getRequest('/api/v1/common/captcha/init', params)
         },
         sendSms: (phone, params) => {
             getRequest(`/common/captcha/sendSms/${phone}`, params)
         },
         smsLogin: (params) => {
-            return postRequest('/user/smsLogin', params)
+            return postRequest('/api/v1/user/smsLogin', params)
         },
         userInfoEdit: (params) => {
-            return postRequest('/user/edit', params)
+            return postRequest('/api/v1/user/edit', params)
         },
         changePass: (params) => {
-            return postRequest('/user/modifyPass', params)
+            return postRequest('/api/v1/user/modifyPass', params)
         },
         getUserListData: (params) => {
-            return getRequest('/permission/user/admin', params)
+            return getRequest('/api/v1/permission/user/admin', params)
         },
         getAllUserData: (params) => {
-            return getRequest('/user/getAll', params)
+            return getRequest('/api/v1/user/getAll', params)
         },
         addUser: (params) => {
-            return postRequest('/permission/user/admin', params)
+            return postRequest('/api/v1/permission/user/admin', params)
         },
         editUser: (params) => {
-            return putRequest('/permission/user/admin', params)
+            return putRequest('/api/v1/permission/user/admin', params)
         },
         userUpdatePassword: (params) => {
-            return putRequest('/user/password', params)
+            return putRequest('/api/v1/user/password', params)
         },
         enableUser: (id, params) => {
             return putRequest(`/permission/user/admin/enable/${id}`, params)
@@ -78,48 +78,48 @@ export default function ({ $axios, store }) {
             return deleteRequest(`/permission/user/admin/${ids}`)
         },
         initDepartment: (params) => {
-            return getRequest('/permission/department/by/parent/0', params)
+            return getRequest('/api/v1/permission/department/by/parent/0', params)
         },
         loadDepartment: (id, params) => {
             return getRequest(`/permission/department/by/parent/${id}`, params)
         },
         addDepartment: (params) => {
-            return postRequest('/permission/department', params)
+            return postRequest('/api/v1/permission/department', params)
         },
         editDepartment: (params) => {
-            return putRequest('/permission/department', params)
+            return putRequest('/api/v1/permission/department', params)
         },
         deleteDepartment: (ids, params) => {
             return deleteRequest(`/department/delByIds/${ids}`, params)
         },
         searchDepartment: (params) => {
-            return getRequest('/department/search', params)
+            return getRequest('/api/v1/department/search', params)
         },
         getAllRoleList: (params) => {
-            return getRequest('/permission/role/all', params)
+            return getRequest('/api/v1/permission/role/all', params)
         },
         getRoleList: (params) => {
-            return getRequest('/permission/role', params)
+            return getRequest('/api/v1/permission/role', params)
         },
         // 添加角色
         addRole: (params) => {
-            return postRequest('/permission/role', params)
+            return postRequest('/api/v1/permission/role', params)
         },
         // 编辑角色
         editRole: (params) => {
-            return putRequest('/permission/role', params)
+            return putRequest('/api/v1/permission/role', params)
         },
         // 设为或取消注册角色
         setDefaultRole: (params) => {
-            return putRequest('/permission/role/default', params)
+            return putRequest('/api/v1/permission/role/default', params)
         },
         // 分配角色权限
         editRolePerm: (params) => {
-            return postRequest('/permission/role/menu', params)
+            return postRequest('/api/v1/permission/role/menu', params)
         },
         // 分配角色数据权限
         editRoleDep: (params) => {
-            return postRequest('/permission/role/department', params)
+            return postRequest('/api/v1/permission/role/department', params)
         },
         // 删除角色
         deleteRole: (ids) => {
@@ -127,19 +127,19 @@ export default function ({ $axios, store }) {
         },
         // 获取全部权限数据
         getAllPermissionList: (params) => {
-            return getRequest('/permission/menu/all', params)
+            return getRequest('/api/v1/permission/menu/all', params)
         },
         // 
         getMenuList: (params) => {
-            return getRequest('/permission/menu', params)
+            return getRequest('/api/v1/permission/menu', params)
         },
         // 添加权限
         addPermission: (params) => {
-            return postRequest('/permission/menu', params)
+            return postRequest('/api/v1/permission/menu', params)
         },
         // 编辑权限
         editPermission: (params) => {
-            return putRequest('/permission/menu', params)
+            return putRequest('/api/v1/permission/menu', params)
         },
         // 删除权限
         deletePermission: (ids) => {
@@ -147,7 +147,7 @@ export default function ({ $axios, store }) {
         },
         // 搜索权限
         searchPermission: (params) => {
-            return getRequest('/permission/menu/search', params)
+            return getRequest('/api/v1/permission/menu/search', params)
         },
     }
 }
