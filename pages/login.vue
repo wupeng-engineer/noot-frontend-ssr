@@ -28,6 +28,7 @@
 
 <script>
 import Cookies from "js-cookie";
+import util from '~/libs/util';
 export default {
   data() {
     const validatephone = (rule, value, callback) => {
@@ -135,6 +136,7 @@ export default {
                     // 避免超过大小限制
                     delete res.data.permissions;
                     this.$store.commit('setInfo', res.data);
+                    
                     this.$router.push({ name: "/sys/user" });
                   } else {
                     this.loading = false;

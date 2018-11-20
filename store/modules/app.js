@@ -13,8 +13,7 @@ const app = {
         themeColor: '',
         pageOpenedList: [],
         currentPageName: '',
-        currentPath: [
-        ], 
+        currentPath: [], 
         // 面包屑数组
         menuList: [],
         routers: [ ],
@@ -34,9 +33,6 @@ const app = {
         },
         setTagsList(state, list) {
             state.tagsList.push(...list);
-        },
-        updateMenulist(state, routes) {
-            state.menuList = routes;
         },
         removeMenuList(state, roues) {
             state.menuList = [];

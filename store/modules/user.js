@@ -32,6 +32,7 @@ const user = {
             Cookies.remove('access_token');
             state.info = {};
             state.token = '';
+            state.menuList = [];
             state.tokenValid = true;
         },
         setInfo (state, info) {

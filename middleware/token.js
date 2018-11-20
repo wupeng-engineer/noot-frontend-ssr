@@ -24,7 +24,7 @@ export default function ({ app, req, res, store, redirect, route }) {
         token = store.state.token;
     }
 
-    if (userInfo.id && store.state.app.menuList.length) {
+    if (userInfo.id && store.state.user.menuList.length) {
         if (currentPath === '/login') return redirect('/sys/user');
     }
     if (!userInfo.id) {
@@ -41,14 +41,14 @@ export default function ({ app, req, res, store, redirect, route }) {
         });
     } else {
         // 加载菜单
-        if (store.state.app.menuList.length > 0) return;
+        if (store.state.user.menuList.length > 0) return;
         return app.$axios.api.getMenuList().then(res => {
             let menuData = res.data || [];
             const constRoutes = [];
             util.initRouterNode(constRoutes, menuData);
 
             
-            store.commit('updateMenulist', constRoutes.filter(item => item.children.length > 0));
+            store.commit('setMenulist', constRoutes.filter(item => item.children.length > 0));
 
             let tagsList = [];
             store.state.app.routers.map((item) => {
