@@ -171,7 +171,7 @@ export default function ({ $axios, store }) {
             return getRequest('/api/v1/permission/menu/search', params)
         },
         userRecordList: (params) => {
-            return getRequest('/business/user/record', params);
+            return getRequest('/api/v1/business/user/record', params);
         }
     }
 }
