@@ -5,11 +5,28 @@ const user = {
         info: {},
         token: '',
         menuList: [],
-        tokenValid: true
+        tokenValid: true,
+        blockApiList: [],
     },
     mutations: {
         setMenulist(state, routes) {
             state.menuList = routes;
+            const tmp = [];
+            routes.forEach(element => {
+                if (element.children && element.children.length > 0) {
+                    element.children.forEach(second => {
+                        if (second.children && second.children.length > 0) {
+                            second.children.forEach(third => {
+                                tmp.push({
+                                    title: third.title,
+                                    url: third.path
+                                });
+                            })
+                        }
+                    })
+                }
+            });
+            state.blockApiList= tmp;
         },
         logout (state, vm) {
             Cookies.remove('access_token');
@@ -27,20 +44,6 @@ const user = {
          setTokenValid (state, bool) {
              state.tokenValid = bool
          }
-    },
-    actions: {
-        setInfo({ commit }) {
-            commit(setInfo)
-        },
-        logout({ commit }) {
-            commit(logout)
-        },
-        setToken({ commit }) {
-            commit(setToken)
-        },
-        setTokenValid({ commit }) {
-            commit(setTokenValid)
-        }
     },
 };
 

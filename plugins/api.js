@@ -1,10 +1,30 @@
+import { Message } from 'iview';
 export default function ({ $axios, store }) {
+    function checkApiPathValid(url, func) {
+        let flag = false;
+        let title = null;
+        store.state.user.blockApiList.forEach(item => {
+            if (url === item.url) {
+                title = item.title
+                flag = true;
+            }
+        })
+        if (!flag) {
+            return Promise.resolve(func)
+        } else {
+            const message = `无 ${title} 功能权限`;
+            if (typeof window !== 'undefined') {
+                Message.error(message);
+            }
+            return Promise.reject({ message });
+        }
+    }
     $axios.defaults.timeout = 15000;
     const getRequest = (url, params) => {
         const token = store.state.user.token;
         $axios.defaults.headers.get['Content-Type'] = 'application/json';
         $axios.defaults.headers.get['Authorization'] = `Bearer ${token}`;
-        return $axios.get(url, { params: { ...params }});
+        return checkApiPathValid(url, $axios.get(url, { params: { ...params }}));
     };
 
     const postRequest = (url, params) => {
