@@ -4,6 +4,7 @@ export default function ({ $axios, redirect, store }) {
     $axios.onRequest(config => {
         console.log(new Date() + 'Making request to ' + config.baseURL + config.url);
     })
+
     $axios.onResponse(response => response.data);
     $axios.onResponseError(error => {
         const response = error.response;
