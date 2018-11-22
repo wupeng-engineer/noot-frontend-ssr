@@ -478,7 +478,6 @@ export default {
             // 编辑
             this.submitLoading = true;
             delete this.userForm.access_token;
-            console.log(this.userForm.access_token);
             this.$axios.api.editUser(this.userForm).then(res => {
               this.submitLoading = false;
               if (res.message ===  'success') {

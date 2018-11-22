@@ -136,8 +136,7 @@ export default {
                     // 避免超过大小限制
                     delete res.data.permissions;
                     this.$store.commit('setInfo', res.data);
-                    
-                    this.$router.push({ name: "/sys/user" });
+                    this.$router.push({ path: "/sys/home" })
                   } else {
                     this.loading = false;
                   }

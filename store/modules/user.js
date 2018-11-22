@@ -6,11 +6,13 @@ const user = {
         token: '',
         menuList: [],
         tokenValid: true,
-        blockApiList: [],
+        whiteApiList: [],
+        fetchedMenu: false,
     },
     mutations: {
         setMenulist(state, routes) {
             state.menuList = routes;
+            state.fetchedMenu = true;
             const tmp = [];
             routes.forEach(element => {
                 if (element.children && element.children.length > 0) {
@@ -19,20 +21,22 @@ const user = {
                             second.children.forEach(third => {
                                 tmp.push({
                                     title: third.title,
-                                    url: third.path
+                                    url: third.path,
+                                    path: second.path
                                 });
                             })
                         }
                     })
                 }
             });
-            state.blockApiList= tmp;
+            state.whiteApiList= tmp;
         },
         logout (state, vm) {
             Cookies.remove('access_token');
             state.info = {};
             state.token = '';
             state.menuList = [];
+            state.fetchedMenu = false;
             state.tokenValid = true;
         },
         setInfo (state, info) {

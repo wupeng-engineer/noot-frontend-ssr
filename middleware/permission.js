@@ -3,9 +3,13 @@ export default ({ store, redirect, route }) => {
     let validFlag = false;
     const breadcrumb = [];
     const currentPath = route.path;
+    console.log('((((((((((((((((((');
 
     store.state.user.menuList.forEach(menu => {
         if (currentPath.indexOf(menu.path) !== -1) {
+            if (currentPath === menu.path)  {
+                validFlag = true;
+            }
             breadcrumb.push({
                 title: menu.title,
                 path: menu.path,
@@ -27,8 +31,10 @@ export default ({ store, redirect, route }) => {
             })
         }
     })
-    if (!validFlag) {
-        redirect('/404');
+    if (store.state.user.menuList.length) {
+        if (!validFlag) {
+            redirect('/404');
+        }
+        store.commit('setCurrentPath', breadcrumb);
     }
-    store.commit('setCurrentPath', breadcrumb);
 }

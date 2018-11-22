@@ -56,9 +56,19 @@
                   <Input v-model="menuForm.path"/>
                 </FormItem>
                 <FormItem label="请求路径" prop="path" v-if="menuForm.type===1">
-                  <Poptip trigger="focus" placement="right" width="230" word-wrap title="提示" content="填写后台请求URL，后台将作权限拦截，若无可填写'无'或其他">
+                  <Poptip trigger="focus" placement="right" word-wrap title="提示" content="填写后台请求URL，后台将作权限拦截，若无可填写'无'或其他">
                     <Input v-model="menuForm.path"/>
                   </Poptip>
+                </FormItem>
+                <FormItem label="请求方法" prop="method" v-if="menuForm.type===1">
+                    <Poptip trigger="focus" placement="right" word-wrap title="提示" content="请填写HTTP请求方法">
+                        <Select v-model="menuForm.method" placeholder="选择请求方法" filterable clearable>
+                            <Option key="1" value="GET">GET</Option>
+                            <Option key="2" value="POST">POST</Option>
+                            <Option key="3" value="DELETE">DELETE</Option>
+                            <Option key="4" value="PUT">PUT</Option>
+                        </Select> 
+                    </Poptip>
                 </FormItem>
                 <FormItem label="按钮权限类型" prop="buttonType" v-if="menuForm.type===1">
                   <Select v-model="menuForm.buttonType" placeholder="请选择或输入搜索" filterable clearable>
@@ -138,6 +148,16 @@
                 <Input v-model="menuFormAdd.path"/>
               </Poptip>
             </FormItem>
+            <FormItem label="请求方法" prop="method" v-if="menuFormAdd.type===1">
+              <Poptip trigger="focus" placement="right" word-wrap title="提示" content="请填写HTTP请求方法">
+                <Select v-model="menuFormAdd.method" placeholder="选择请求方法" filterable clearable>
+                    <Option key="1" value="GET">GET</Option>
+                    <Option key="2" value="POST">POST</Option>
+                    <Option key="3" value="DELETE">DELETE</Option>
+                    <Option key="4" value="PUT">PUT</Option>
+                </Select> 
+              </Poptip>
+            </FormItem>
             <FormItem label="按钮权限类型" prop="buttonType" v-if="menuFormAdd.type===1">
               <Select v-model="menuFormAdd.buttonType" placeholder="请选择或输入搜索" filterable clearable>
                 <Option v-for="(item, i) in optionData" :key="i" :value="item.value">{{item.title}}</Option>
@@ -210,7 +230,7 @@ export default {
         sortOrder: null,
         level: null,
         status: 0,
-        url: ""
+        url: "",
       },
       menuFormAdd: {
         buttonType: ""
@@ -486,7 +506,6 @@ export default {
           this.$axios.api.deletePermission(ids).then(res => {
             if (res.message === 'success') {
               this.$Message.success("删除成功");
-              util.initRouter(this);
               this.selectList = [];
               this.selectCount = 0;
               this.canelEdit();
@@ -502,6 +521,18 @@ export default {
   }
 };
 </script>
+<style lang="less">
+.ivu-poptip {
+    display: inline-block;
+    width: 100%;
+}
+
+.ivu-poptip-rel {
+    display: inline-block;
+    position: relative;
+    width: 100% !important;
+}
+</style>
 
 <style lang="less" scoped>
 .search {
@@ -525,16 +556,7 @@ export default {
     }
 }
 
-.ivu-poptip {
-    display: inline-block;
-    width: 100%;
-}
 
-.ivu-poptip-rel {
-    display: inline-block;
-    position: relative;
-    width: 100%;
-}
 
 .tree-bar {
     max-height: 500px;

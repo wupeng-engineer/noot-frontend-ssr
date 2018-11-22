@@ -1,12 +1,13 @@
 import { Message } from 'iview';
-export default function ({ $axios, store }) {
+export default function ({ $axios, store, route }) {
     function checkApiPathValid(url, func) {
-        let flag = false;
+            return Promise.resolve(func)
+        let flag = true;
         let title = null;
-        store.state.user.blockApiList.forEach(item => {
+        store.state.user.whiteApiList.forEach(item => {
             if (url === item.url) {
                 title = item.title
-                flag = true;
+                flag = false;
             }
         })
         if (!flag) {
@@ -164,7 +165,7 @@ export default function ({ $axios, store }) {
         },
         // 删除权限
         deletePermission: (ids) => {
-            return deleteRequest(`/permission/menu/${ids}`)
+            return deleteRequest(`/api/v1/permission/menu/${ids}`)
         },
         // 搜索权限
         searchPermission: (params) => {

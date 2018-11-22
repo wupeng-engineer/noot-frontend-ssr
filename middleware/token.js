@@ -25,7 +25,7 @@ export default function ({ app, req, res, store, redirect, route }) {
     }
 
     if (userInfo.id && store.state.user.menuList.length) {
-        if (currentPath === '/login') return redirect('/sys/user');
+        if (currentPath === '/login' || currentPath === '/') return redirect('/sys/home');
     }
     if (!userInfo.id) {
         return app.$axios.api.userInfo().then(res => {
@@ -37,17 +37,31 @@ export default function ({ app, req, res, store, redirect, route }) {
             } else {
                 store.commit('setInfo', res.data);
                 store.commit('setTokenValid', true);
+                return app.$axios.api.getMenuList().then(res => {
+                    let menuData = res.data || [];
+                    const constRoutes = [];
+                    util.initRouterNode(constRoutes, menuData);
+                    store.commit('setMenulist', constRoutes.filter(item => item.children.length > 0));
+        
+                    let tagsList = [];
+                    store.state.app.routers.map((item) => {
+                        if (item.children.length <= 1) {
+                            tagsList.push(item.children[0]);
+                        } else {
+                            tagsList.push(...item.children);
+                        }
+                    });
+                    store.commit('setTagsList', tagsList);
+                    return;
+                });
             }
         });
     } else {
         // 加载菜单
-        if (store.state.user.menuList.length > 0) return;
         return app.$axios.api.getMenuList().then(res => {
             let menuData = res.data || [];
             const constRoutes = [];
             util.initRouterNode(constRoutes, menuData);
-
-            
             store.commit('setMenulist', constRoutes.filter(item => item.children.length > 0));
 
             let tagsList = [];
@@ -59,7 +73,7 @@ export default function ({ app, req, res, store, redirect, route }) {
                 }
             });
             store.commit('setTagsList', tagsList);
-            return redirect('/sys/user')
+            return;
         });
     }
 }
