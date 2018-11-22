@@ -1,6 +1,5 @@
 import util from '~/libs/util'
 export default function ({ app, req, res, store, redirect, route }) {
-    console.log('token', '################')
     const userInfo = store.state.user.info;
     let token = '';
     // 如果token存在 但是 没有用户信息
@@ -38,6 +37,23 @@ export default function ({ app, req, res, store, redirect, route }) {
             } else {
                 store.commit('setInfo', res.data);
                 store.commit('setTokenValid', true);
+                return app.$axios.api.getMenuList().then(res => {
+                    let menuData = res.data || [];
+                    const constRoutes = [];
+                    util.initRouterNode(constRoutes, menuData);
+                    store.commit('setMenulist', constRoutes.filter(item => item.children.length > 0));
+        
+                    let tagsList = [];
+                    store.state.app.routers.map((item) => {
+                        if (item.children.length <= 1) {
+                            tagsList.push(item.children[0]);
+                        } else {
+                            tagsList.push(...item.children);
+                        }
+                    });
+                    store.commit('setTagsList', tagsList);
+                    return;
+                });
             }
         });
     } else {
@@ -57,7 +73,6 @@ export default function ({ app, req, res, store, redirect, route }) {
                 }
             });
             store.commit('setTagsList', tagsList);
-            console.log(777777777777777)
             return;
         });
     }
