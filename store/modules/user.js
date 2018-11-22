@@ -6,11 +6,13 @@ const user = {
         token: '',
         menuList: [],
         tokenValid: true,
-        whiteApiList: []
+        whiteApiList: [],
+        fetchedMenu: false,
     },
     mutations: {
         setMenulist(state, routes) {
             state.menuList = routes;
+            state.fetchedMenu = true;
             const tmp = [];
             routes.forEach(element => {
                 if (element.children && element.children.length > 0) {
@@ -34,6 +36,7 @@ const user = {
             state.info = {};
             state.token = '';
             state.menuList = [];
+            state.fetchedMenu = false;
             state.tokenValid = true;
         },
         setInfo (state, info) {

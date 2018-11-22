@@ -1,6 +1,5 @@
 import { Message } from 'iview';
 export default function ({ $axios, store, route }) {
-    console.log(route);
     function checkApiPathValid(url, func) {
             return Promise.resolve(func)
         let flag = true;
@@ -165,7 +164,7 @@ export default function ({ $axios, store, route }) {
         },
         // 删除权限
         deletePermission: (ids) => {
-            return deleteRequest(`/permission/menu/${ids}`)
+            return deleteRequest(`/api/v1/permission/menu/${ids}`)
         },
         // 搜索权限
         searchPermission: (params) => {

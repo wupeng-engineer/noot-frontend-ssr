@@ -506,7 +506,6 @@ export default {
           this.$axios.api.deletePermission(ids).then(res => {
             if (res.message === 'success') {
               this.$Message.success("删除成功");
-              util.initRouter(this);
               this.selectList = [];
               this.selectCount = 0;
               this.canelEdit();

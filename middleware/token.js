@@ -1,5 +1,6 @@
 import util from '~/libs/util'
 export default function ({ app, req, res, store, redirect, route }) {
+    console.log('token', '################')
     const userInfo = store.state.user.info;
     let token = '';
     // 如果token存在 但是 没有用户信息
@@ -25,7 +26,7 @@ export default function ({ app, req, res, store, redirect, route }) {
     }
 
     if (userInfo.id && store.state.user.menuList.length) {
-        if (currentPath === '/login') return redirect('/sys/user');
+        if (currentPath === '/login' || currentPath === '/') return redirect('/sys/home');
     }
     if (!userInfo.id) {
         return app.$axios.api.userInfo().then(res => {
@@ -41,13 +42,10 @@ export default function ({ app, req, res, store, redirect, route }) {
         });
     } else {
         // 加载菜单
-        if (store.state.user.menuList.length > 0) return;
         return app.$axios.api.getMenuList().then(res => {
             let menuData = res.data || [];
             const constRoutes = [];
             util.initRouterNode(constRoutes, menuData);
-
-            
             store.commit('setMenulist', constRoutes.filter(item => item.children.length > 0));
 
             let tagsList = [];
@@ -59,7 +57,8 @@ export default function ({ app, req, res, store, redirect, route }) {
                 }
             });
             store.commit('setTagsList', tagsList);
-            return redirect('/sys/user')
+            console.log(777777777777777)
+            return;
         });
     }
 }

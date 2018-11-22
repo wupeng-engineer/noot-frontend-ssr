@@ -34,6 +34,8 @@ module.exports = {
         src: '~/plugins/api.js', ssr: true
     }, {
         src: '~/plugins/axios.js', ssr: true
+    }, {
+        src: '~/plugins/route.js', ssr: true
     }],
 
     /*
