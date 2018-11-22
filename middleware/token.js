@@ -27,14 +27,13 @@ export default function ({ app, req, res, store, redirect, route }) {
     if (userInfo.id && store.state.user.menuList.length) {
         if (currentPath === '/login' || currentPath === '/') return redirect('/sys/home');
     }
+    if (route.query.validToken !== 'false')
     if (!userInfo.id) {
         return app.$axios.api.userInfo().then(res => {
             if (res.message !== 'success') {
                 if (currentPath !== '/login') {
                     store.commit('setTokenValid', false);
-                    if (route.query.validToken !== 'false') {
-                        return redirect('/login');
-                    }
+                    return redirect('/login');
                 }
             } else {
                 store.commit('setInfo', res.data);
