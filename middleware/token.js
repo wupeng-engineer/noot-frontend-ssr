@@ -32,7 +32,9 @@ export default function ({ app, req, res, store, redirect, route }) {
             if (res.message !== 'success') {
                 if (currentPath !== '/login') {
                     store.commit('setTokenValid', false);
-                    return redirect('/login');
+                    if (route.query.validToken !== 'false') {
+                        return redirect('/login');
+                    }
                 }
             } else {
                 store.commit('setInfo', res.data);

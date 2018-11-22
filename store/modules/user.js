@@ -13,6 +13,7 @@ const user = {
         setMenulist(state, routes) {
             state.menuList = routes;
             state.fetchedMenu = true;
+            state.tokenValid = true;
             const tmp = [];
             routes.forEach(element => {
                 if (element.children && element.children.length > 0) {
