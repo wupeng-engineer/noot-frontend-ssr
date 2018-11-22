@@ -1,12 +1,14 @@
 import { Message } from 'iview';
-export default function ({ $axios, store }) {
+export default function ({ $axios, store, route }) {
+    console.log(route);
     function checkApiPathValid(url, func) {
-        let flag = false;
+            return Promise.resolve(func)
+        let flag = true;
         let title = null;
-        store.state.user.blockApiList.forEach(item => {
+        store.state.user.whiteApiList.forEach(item => {
             if (url === item.url) {
                 title = item.title
-                flag = true;
+                flag = false;
             }
         })
         if (!flag) {

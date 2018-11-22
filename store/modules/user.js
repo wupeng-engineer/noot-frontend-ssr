@@ -6,7 +6,7 @@ const user = {
         token: '',
         menuList: [],
         tokenValid: true,
-        blockApiList: [],
+        whiteApiList: []
     },
     mutations: {
         setMenulist(state, routes) {
@@ -19,14 +19,15 @@ const user = {
                             second.children.forEach(third => {
                                 tmp.push({
                                     title: third.title,
-                                    url: third.path
+                                    url: third.path,
+                                    path: second.path
                                 });
                             })
                         }
                     })
                 }
             });
-            state.blockApiList= tmp;
+            state.whiteApiList= tmp;
         },
         logout (state, vm) {
             Cookies.remove('access_token');
