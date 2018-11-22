@@ -10,6 +10,14 @@ const user = {
         fetchedMenu: false,
     },
     mutations: {
+        cleanInfo(state, routes) {
+            state.info = {},
+            state.token = '',
+            state.menuList = [],
+            state.tokenValid = true,
+            state.whiteApiList = [],
+            state.fetchedMenu = false
+        },
         setMenulist(state, routes) {
             state.menuList = routes;
             state.fetchedMenu = true;

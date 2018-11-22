@@ -235,28 +235,28 @@ export default {
           width: 100,
           align: "center",
           fixed: "right",
-          render: (h, params) => {
-            return h("div", [
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "primary",
-                    size: "small"
-                  },
-                  style: {
-                    marginRight: "5px"
-                  },
-                  on: {
-                    click: () => {
-                      this.edit(params.row);
-                    }
-                  }
-                },
-                "编辑"
-              ),
-            ]);
-          }
+        //   render: (h, params) => {
+        //     return h("div", [
+        //       h(
+        //         "Button",
+        //         {
+        //           props: {
+        //             type: "primary",
+        //             size: "small"
+        //           },
+        //           style: {
+        //             marginRight: "5px"
+        //           },
+        //           on: {
+        //             click: () => {
+        //               this.edit(params.row);
+        //             }
+        //           }
+        //         },
+        //         "编辑"
+        //       ),
+        //     ]);
+        //   }
         }
       ],
       data: [],

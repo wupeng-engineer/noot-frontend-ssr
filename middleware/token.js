@@ -6,6 +6,7 @@ export default function ({ app, req, res, store, redirect, route }) {
     const currentPath = route.path;
     // 如果是server
     if (typeof window === 'undefined') {
+        store.commit('cleanInfo');
         const cookieName = 'access_token';
         const stringCookie = decodeURI(req.headers.cookie);
         if (!stringCookie || stringCookie.indexOf('access_token') === -1) {
