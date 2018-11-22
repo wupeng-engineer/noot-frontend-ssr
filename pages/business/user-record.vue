@@ -16,7 +16,6 @@
                             </Form-item>
                             <Form-item style="margin-left:-35px;" class="br">
                               <Button @click="handleSearch" type="primary" icon="ios-search">搜索</Button>
-                              <Button @click="handleReset" >重置</Button>
                             </Form-item>
                         </Form>
                     </Row>
@@ -383,13 +382,13 @@ export default {
     },
     changePage(v) {
       this.searchForm.pageNumber = v;
-      this.getUserList(false);
+      this.getUserList(false, false);
     },
     changePageSize(v) {
       this.searchForm.pageSize = v;
-      this.getUserList(false);
+      this.getUserList(false, false);
     },
-    getUserList(needRecord) {
+    getUserList(needRecord, showResult) {
       // 多条件搜索用户列表
       this.loading = true;
       this.$axios.api.userRecordList({
@@ -404,7 +403,9 @@ export default {
         if (res.message ===  'success') {
           this.data = res.data.list;
           this.total = res.data.total;
-          this.$Message.success(`搜索成功, 剩余积分: ${res.data.record}`);
+          if (showResult) {
+            this.$Message.success(`搜索成功, 剩余积分: ${res.data.record}`);
+          }
         }
         
       });
@@ -412,7 +413,7 @@ export default {
     handleSearch() {
       this.searchForm.pageNumber = 1;
       this.searchForm.pageSize = 10;
-      this.getUserList(true);
+      this.getUserList(true, true);
     },
     handleReset() {
       this.$refs.searchForm.resetFields();
@@ -512,7 +513,6 @@ export default {
       if (res.message ===  'success') {
         file.url = res.data;
         this.$Message.success(`成功上传${res.data}条数据`);
-        this.getUserList();
       } else {
         this.$Message.error(res.message);
       }
