@@ -3,7 +3,6 @@ export default ({ store, redirect, route }) => {
     let validFlag = false;
     const breadcrumb = [];
     const currentPath = route.path;
-    console.log('((((((((((((((((((');
 
     store.state.user.menuList.forEach(menu => {
         if (currentPath.indexOf(menu.path) !== -1) {

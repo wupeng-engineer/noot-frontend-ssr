@@ -5,7 +5,7 @@
 <script>
 import circleLoading from "~/components/circle-loading.vue";
 export default {
-  layout: 'sys',
+  layout: 'permission',
   name: "home",
   components: {
     circleLoading,

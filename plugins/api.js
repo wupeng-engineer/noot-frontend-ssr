@@ -1,19 +1,24 @@
 import { Message } from 'iview';
+import urlCompare from 'path-to-regexp'
+
+const commonApi = [{
+    url: '/api/v1/account/info'
+}, {
+    url: '/api/v1/permission/menu'
+}]
 export default function ({ $axios, store, route }) {
     function checkApiPathValid(url, func) {
-            return Promise.resolve(func)
-        let flag = true;
-        let title = null;
-        store.state.user.whiteApiList.forEach(item => {
-            if (url === item.url) {
-                title = item.title
-                flag = false;
+        let flag = false;
+        store.state.user.whiteApiList.concat(commonApi).forEach(item => {
+            const parse = urlCompare(item.url);
+            if (parse.exec(url)) {
+                flag = true;
             }
         })
-        if (!flag) {
+        if (flag) {
             return Promise.resolve(func)
         } else {
-            const message = `无 ${title} 功能权限`;
+            const message = `无此操作权限,请联系管理员开启权限`;
             if (typeof window !== 'undefined') {
                 Message.error(message);
             }
