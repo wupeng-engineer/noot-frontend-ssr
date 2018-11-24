@@ -43,7 +43,8 @@ const user = {
             state.info = info;
         },
         setToken (state, token) {
-            state.token = token
+            state.token = token;
+            console.log('set token');
          },
          setTokenValid (state, bool) {
              state.tokenValid = bool

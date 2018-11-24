@@ -133,10 +133,24 @@ export default {
                 // 获取用户信息
                 this.$axios.api.userInfo().then(res => {
                   if (res.message ===  'success') {
-                    // 避免超过大小限制
-                    delete res.data.permissions;
                     this.$store.commit('setInfo', res.data);
-                    this.$router.push({ path: "/sys/home" })
+                    this.$axios.api.getMenuList().then(res => {
+                        let menuData = res.data || [];
+                        const constRoutes = [];
+                        util.initRouterNode(constRoutes, menuData);
+                        this.$store.commit('setMenulist', constRoutes.filter(item => item.children.length > 0));
+
+                        let tagsList = [];
+                        this.$store.state.app.routers.map((item) => {
+                            if (item.children.length <= 1) {
+                                tagsList.push(item.children[0]);
+                            } else {
+                                tagsList.push(...item.children);
+                            }
+                        });
+                        this.$store.commit('setTagsList', tagsList);
+                        this.$router.push({ path: "/sys/home" })
+                    });
                   } else {
                     this.loading = false;
                   }
