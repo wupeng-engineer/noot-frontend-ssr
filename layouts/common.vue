@@ -141,9 +141,8 @@ export default {
         } else if (name === "loginout") {
           // 退出登录
           this.$store.commit("logout");
-          this.$store.commit("removeMenuList");
           // 强制刷新页面 重新加载router
-          location.reload();
+          this.$router.push({ path: '/login'})
         }
     },
     checkTag(name) {

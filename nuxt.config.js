@@ -76,6 +76,5 @@ module.exports = {
         }
     },
     router: {
-        middleware: [ 'token' ],
     }
 }
