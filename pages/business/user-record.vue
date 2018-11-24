@@ -4,6 +4,7 @@
             <Col>
                 <Card>
                     <Row>
+                        <Alert type="warning">请按照表格字段位置上传excel文件  注意：违约时间的格式为:年-月-日</Alert>
                         <Form ref="searchForm" :model="searchForm" inline :label-width="70" class="search-form">
                             <Form-item label="姓名" prop="realname">
                               <Input type="text" v-model="searchForm.realname" clearable placeholder="请输入用户名" style="width: 150px"/>
@@ -25,6 +26,7 @@
                           :on-success="handleSuccess"
                           :on-error="handleError"
                           :format="['xlsx']"
+                          :before-upload="handleBeforeUpload"
                           :max-size="512000000"
                           :on-format-error="handleFormatError"
                           :on-exceeded-size="handleMaxSize"
@@ -34,7 +36,7 @@
                         </Upload>
                     </Row>
                     <Row>
-                        <Table :loading="loading" border :columns="columns" :data="data" sortable="custom" @on-sort-change="changeSort" @on-selection-change="showSelect" ref="table"></Table>
+                        <Table :loading="loading" border :columns="columns" :data="data" sortable="custom" @on-sort-change="changeSort" ref="table"></Table>
                     </Row>
                     <Row type="flex" justify="end" class="page">
                         <Page :current="searchForm.pageNumber" :total="total" :page-size="searchForm.pageSize" @on-change="changePage" @on-page-size-change="changePageSize" :page-size-opts="[10,20,50]" size="small" show-total show-elevator show-sizer></Page>
@@ -42,54 +44,6 @@
                 </Card>
             </Col>
         </Row>
-        <Modal :title="modalTitle" v-model="userModalVisible" :mask-closable='false' :width="500" :styles="{top: '30px'}">
-            <Form ref="userForm" :model="userForm" :label-width="70" :rules="userFormValidate">
-                <FormItem label="用户名" prop="username">
-                    <Input v-model="userForm.username" autocomplete="off"/>
-                </FormItem>
-                <FormItem label="密码" prop="password" v-if="modalType===0" :error="errorPass">
-                    <Input type="password" v-model="userForm.password" autocomplete="off"/>
-                </FormItem>
-                <FormItem label="邮箱" prop="email">
-                    <Input v-model="userForm.email"/>
-                </FormItem>
-                <FormItem label="手机号" prop="phone">
-                    <Input v-model="userForm.phone"/>
-                </FormItem>
-                <FormItem label="性别" prop="sex">
-                  <RadioGroup v-model="userForm.sex">
-                    <Radio :label="1">男</Radio>
-                    <Radio :label="0">女</Radio>
-                  </RadioGroup>
-                </FormItem>
-                <FormItem label="用户类型" prop="type">
-                  <Select v-model="userForm.type" placeholder="请选择">
-                    <Option :value="0">普通用户</Option>
-                    <Option :value="1">管理员</Option>
-                  </Select>
-                </FormItem>
-                <FormItem label="角色分配" prop="roles">
-                  <Select v-model="userForm.roles" multiple>
-                      <Option v-for="item in roleList" :value="item.id" :key="item.id" :label="item.name">
-                        <!-- <div style="display:flex;flex-direction:column"> -->
-                        <span style="margin-right:10px;">{{ item.name }}</span>
-                        <span style="color:#ccc;">{{ item.description }}</span>
-                        <!-- </div> -->
-                      </Option>
-                  </Select>
-                </FormItem>
-            </Form>
-            <div slot="footer">
-                <Button type="text" @click="cancelUser">取消</Button>
-                <Button type="primary" :loading="submitLoading" @click="submitUser">提交</Button>
-            </div>
-        </Modal>
-        <Modal title="图片预览" v-model="viewImage" :styles="{top: '30px'}" draggable>
-          <img :src="userForm.avatar" alt="无效的图片链接" style="width: 100%;margin: 0 auto;display: block;">
-          <div slot="footer">
-            <Button @click="viewImage=false">关闭</Button>
-          </div>
-        </Modal>
     </div>
 </template>
 
@@ -119,24 +73,11 @@ export default {
       loading: false,
       operationLoading: false,
       modalExportAll: false,
-      drop: false,
-      dropDownContent: "展开",
-      dropDownIcon: "ios-arrow-down",
-      selectCount: 0,
-      selectList: [],
-      viewImage: false,
-      department: [],
-      selectDep: [],
-      dataDep: [],
       searchKey: "",
       searchForm: {
         realname: "",
         departmentId: "",
         phone: "",
-        email: "",
-        sex: "",
-        type: "",
-        status: "",
         pageNumber: 1,
         pageSize: 10,
         sort: "created_at",
@@ -144,34 +85,7 @@ export default {
         startDate: "",
         endDate: ""
       },
-      selectDate: null,
       modalType: 0,
-      userModalVisible: false,
-      modalTitle: "",
-      userForm: {
-        sex: 1,
-        type: 0,
-        avatar: "https://s1.ax1x.com/2018/05/19/CcdVQP.png",
-        roles: [],
-        departmentId: "",
-        departmentTitle: ""
-      },
-      userRoles: [],
-      roleList: [],
-      errorPass: "",
-      userFormValidate: {
-        username: [
-          { required: true, message: "账号不能为空", trigger: "blur" }
-        ],
-        phone: [
-          { required: true, message: "手机号不能为空", trigger: "blur" },
-          { validator: validatephone, trigger: "blur" }
-        ],
-        email: [
-          { required: true, message: "请输入邮箱地址" },
-          { type: "email", message: "邮箱格式不正确" }
-        ]
-      },
       submitLoading: false,
       columns: [
         {
@@ -194,70 +108,22 @@ export default {
           width: 250
         },
         {
-          title: "手机",
-          key: "phone",
-          width: 115,
-          sortable: true,
-          render: (h, params) => {
-              return h("span", params.row.phone);
-          }
-        },
-        {
           title: "违约金额",
           key: "money",
           width: 100,
-          sortable: true
         },
         {
           title: "违约时间",
           key: "discredit_date",
-          sortable: true,
           sortType: "desc",
           width: 200
         },
         {
-          title: "违约次数",
-          key: "discredit_times",
-          sortable: true,
-          sortType: "desc",
-          width: 100
-        },
-        {
           title: "数据提供者",
-          key: "create_user_id",
-          sortable: true,
+          key: "create_username",
           sortType: "desc",
           width: 100
         },
-        {
-          title: "操作",
-          key: "action",
-          width: 100,
-          align: "center",
-          fixed: "right",
-        //   render: (h, params) => {
-        //     return h("div", [
-        //       h(
-        //         "Button",
-        //         {
-        //           props: {
-        //             type: "primary",
-        //             size: "small"
-        //           },
-        //           style: {
-        //             marginRight: "5px"
-        //           },
-        //           on: {
-        //             click: () => {
-        //               this.edit(params.row);
-        //             }
-        //           }
-        //         },
-        //         "编辑"
-        //       ),
-        //     ]);
-        //   }
-        }
       ],
       data: [],
       exportData: [],
@@ -389,6 +255,10 @@ export default {
       this.getUserList(false, false);
     },
     getUserList(needRecord, showResult) {
+      if (!this.searchForm.realname && !this.searchForm.phone && !this.searchForm.idcard) {
+          this.$Message.error('请输入搜索条件');
+          return;
+      }
       // 多条件搜索用户列表
       this.loading = true;
       this.$axios.api.userRecordList({
@@ -403,7 +273,7 @@ export default {
         if (res.message ===  'success') {
           this.data = res.data.list;
           this.total = res.data.total;
-          if (showResult) {
+          if (showResult && res.data.list.length) {
             this.$Message.success(`搜索成功, 剩余积分: ${res.data.record}`);
           }
         }
@@ -448,59 +318,13 @@ export default {
     cancelUser() {
       this.userModalVisible = false;
     },
-    submitUser() {
-      this.$refs.userForm.validate(valid => {
-        if (valid) {
-          if (this.modalType === 0) {
-            // 添加用户 避免编辑后传入id
-            delete this.userForm.id;
-            delete this.userForm.status;
-            if (
-              this.userForm.password == "" ||
-              this.userForm.password == undefined
-            ) {
-              this.errorPass = "密码不能为空";
-              return;
-            }
-            if (this.userForm.password.length < 6) {
-              this.errorPass = "密码长度不得少于6位";
-              return;
-            }
-            this.submitLoading = true;
-            this.$axios.api.addUser(this.userForm).then(res => {
-              this.submitLoading = false;
-              if (res.message ===  'success') {
-                this.$Message.success("操作成功");
-                this.getUserList();
-                this.userModalVisible = false;
-              }
-            });
-          } else {
-            // 编辑
-            this.submitLoading = true;
-            delete this.userForm.access_token;
-            this.$axios.api.editUser(this.userForm).then(res => {
-              this.submitLoading = false;
-              if (res.message ===  'success') {
-                this.$Message.success("操作成功");
-                this.getUserList();
-                this.userModalVisible = false;
-              }
-            });
-          }
-        }
-      });
-    },
-    viewPic() {
-      this.viewImage = true;
-    },
     handleFormatError(file) {
       this.$Notice.warning({
         title: "不支持的文件格式",
         desc:
           "所选文件‘ " +
           file.name +
-          " ’格式不正确, 请选择 .jpg .jpeg .png .gif格式文件"
+          " ’格式不正确, 请选择 .xlsx格式文件"
       });
     },
     handleMaxSize(file) {
@@ -510,133 +334,27 @@ export default {
       });
     },
     handleSuccess(res, file) {
-      if (res.message ===  'success') {
+    if (res.message ===  'success') {
         file.url = res.data;
         this.$Message.success(`成功上传${res.data}条数据`);
-      } else {
+    } else {
         this.$Message.error(res.message);
-      }
+    }
     },
     handleError(error, file, fileList) {
       this.$Message.error(error.toString());
     },
-    add() {
-      this.modalType = 0;
-      this.modalTitle = "添加用户";
-      this.$refs.userForm.resetFields();
-      this.userModalVisible = true;
-    },
-    edit(v) {
-      this.modalType = 1;
-      this.modalTitle = "编辑用户";
-      this.$refs.userForm.resetFields();
-      // 转换null为""
-      for (let attr in v) {
-        if (v[attr] === null) {
-          v[attr] = "";
-        }
-      }
-      let str = JSON.stringify(v);
-      let userInfo = JSON.parse(str);
-      this.userForm = userInfo;
-      let selectRolesId = [];
-      this.userForm.roles.forEach(function(e) {
-        selectRolesId.push(e.id);
-      });
-      this.userForm.roles = selectRolesId;
-      this.userModalVisible = true;
-    },
-    enable(v) {
-      this.$Modal.confirm({
-        title: "确认启用",
-        content: "您确认要启用用户 " + v.username + " ?",
-        onOk: () => {
-          this.operationLoading = true;
-          this.$axios.api.enableUser(v.id).then(res => {
-            this.operationLoading = false;
-            if (res.message ===  'success') {
-              this.$Message.success("操作成功");
-              this.getUserList();
+    handleBeforeUpload() {
+        let flag = false;
+        this.$store.state.user.whiteApiList.forEach(item => {
+            if (this.$store.state.app.uploadUrl.indexOf(item.url) && item.method === 'POST') {
+                flag = true;
             }
-          });
+        });
+        if (!flag) {
+            this.$Message.error('无此功能权限, 请联系管理员开通')
         }
-      });
-    },
-    disable(v) {
-      this.$Modal.confirm({
-        title: "确认禁用",
-        content: "您确认要禁用用户 " + v.username + " ?",
-        onOk: () => {
-          this.operationLoading = true;
-          this.$axios.api.disableUser(v.id).then(res => {
-            this.operationLoading = false;
-            if (res.message ===  'success') {
-              this.$Message.success("操作成功");
-              this.getUserList();
-            }
-          });
-        }
-      });
-    },
-    remove(v) {
-      this.$Modal.confirm({
-        title: "确认删除",
-        content: "您确认要删除用户 " + v.username + " ?",
-        onOk: () => {
-          this.operationLoading = true;
-          deleteUser(v.id).then(res => {
-            this.operationLoading = false;
-            if (res.message ===  'success') {
-              this.$Message.success("删除成功");
-              this.getUserList();
-            }
-          });
-        }
-      });
-    },
-    dropDown() {
-      if (this.drop) {
-        this.dropDownContent = "展开";
-        this.dropDownIcon = "ios-arrow-down";
-      } else {
-        this.dropDownContent = "收起";
-        this.dropDownIcon = "ios-arrow-up";
-      }
-      this.drop = !this.drop;
-    },
-    showSelect(e) {
-      this.exportData = e;
-      this.selectList = e;
-      this.selectCount = e.length;
-    },
-    clearSelectAll() {
-      this.$refs.table.selectAll(false);
-    },
-    delAll() {
-      if (this.selectCount <= 0) {
-        this.$Message.warning("您还未选择要删除的数据");
-        return;
-      }
-      this.$Modal.confirm({
-        title: "确认删除",
-        content: "您确认要删除所选的 " + this.selectCount + " 条数据?",
-        onOk: () => {
-          let ids = "";
-          this.selectList.forEach(function(e) {
-            ids += e.id + ",";
-          });
-          ids = ids.substring(0, ids.length - 1);
-          this.operationLoading = true;
-          this.$axios.api.deleteUser(ids).then(res => {
-            this.operationLoading = false;
-            if (res.message ===  'success') {
-              this.$Message.success("删除成功");
-              this.clearSelectAll();
-              this.getUserList();
-            }
-          });
-        }
-      });
+        return flag;
     }
   },
 };

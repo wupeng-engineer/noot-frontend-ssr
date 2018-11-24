@@ -31,7 +31,8 @@ const user = {
                                 tmp.push({
                                     title: third.title,
                                     url: third.path,
-                                    path: second.path
+                                    path: second.path,
+                                    method: third.method,
                                 });
                             })
                         }

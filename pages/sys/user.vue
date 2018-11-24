@@ -101,25 +101,6 @@
                 <FormItem label="积分" prop="record">
                     <Input v-model="userForm.record"/>
                 </FormItem>
-                <Form-item label="所属部门" prop="departmentTitle">
-                  <Poptip trigger="click" placement="right" title="选择部门" width="250">
-                    <div style="display:flex;">
-                      <Input v-model="userForm.departmentTitle" readonly style="margin-right:10px;"/>
-                      <Button icon="md-trash" @click="clearSelectDep">清空已选</Button>
-                    </div>
-                    <div slot="content" class="tree-bar">
-                      <Input v-model="searchKey" suffix="ios-search" @on-change="searchDp" placeholder="输入部门名搜索"/>
-                      <Tree :data="dataDep" :load-data="loadDataTree" @on-select-change="selectTree"></Tree>
-                      <Spin size="large" fix v-if="dpLoading"></Spin>
-                    </div>
-                  </Poptip>
-                </Form-item>
-                <FormItem label="用户类型" prop="type">
-                  <Select v-model="userForm.type" placeholder="请选择">
-                    <Option :value="0">普通用户</Option>
-                    <Option :value="1">管理员</Option>
-                  </Select>
-                </FormItem>
                 <FormItem label="角色分配" prop="roles">
                   <Select v-model="userForm.roles" multiple>
                       <Option v-for="item in roleList" :value="item.id" :key="item.id" :label="item.name">
@@ -486,9 +467,7 @@ export default {
   },
   methods: {
     init() {
-      this.initDepartmentData();
       this.getUserList();
-      this.initDepartmentTreeData();
     },
     initDepartmentData() {
       this.$axios.api.initDepartment().then(res => {

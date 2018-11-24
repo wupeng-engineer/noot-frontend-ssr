@@ -2,16 +2,21 @@ import { Message } from 'iview';
 import urlCompare from 'path-to-regexp'
 
 const commonApi = [{
-    url: '/api/v1/account/info'
+    url: '/api/v1/account/info',
+    method: 'GET',
 }, {
-    url: '/api/v1/permission/menu'
+    url: '/api/v1/permission/menu',
+    method: 'GET'
+}, {
+    url: '/api/v1/passport/token',
+    method: 'POST'
 }]
 export default function ({ $axios, store, route }) {
-    function checkApiPathValid(url, func) {
+    function checkApiPathValid(url, method, func) {
         let flag = false;
         store.state.user.whiteApiList.concat(commonApi).forEach(item => {
             const parse = urlCompare(item.url);
-            if (parse.exec(url)) {
+            if (parse.exec(url) && method === item.method) {
                 flag = true;
             }
         })
@@ -30,14 +35,14 @@ export default function ({ $axios, store, route }) {
         const token = store.state.user.token;
         $axios.defaults.headers.get['Content-Type'] = 'application/json';
         $axios.defaults.headers.get['Authorization'] = `Bearer ${token}`;
-        return checkApiPathValid(url, $axios.get(url, { params: { ...params }}));
+        return checkApiPathValid(url, 'GET', $axios.get(url, { params: { ...params }}));
     };
 
     const postRequest = (url, params) => {
         const token = store.state.user.token;
         $axios.defaults.headers.post['Content-Type'] = 'application/json';
         $axios.defaults.headers.post['Authorization'] = `Bearer ${token}`;
-        return $axios.post(url, { ...params });
+        return checkApiPathValid(url, 'POST', $axios.post(url, { ...params }));
     };
 
     const putRequest = (url, params) => {
@@ -45,14 +50,14 @@ export default function ({ $axios, store, route }) {
         $axios.defaults.headers.put['Content-Type'] = 'application/json';
         $axios.defaults.headers.put['Authorization'] = `Bearer ${token}`;
         console.log(params);
-        return $axios.put(url, { ...params });
+        return checkApiPathValid(url, 'PUT', $axios.put(url,{ ...params }));
     };
 
     const deleteRequest = (url, params) => {
         const token = store.state.user.token;
         $axios.defaults.headers.delete['Content-Type'] = 'application/json';
         $axios.defaults.headers.delete['Authorization'] = `Bearer ${token}`;
-        return $axios.delete(url, { ...params });
+        return checkApiPathValid(url, 'DELETE', $axios.delete(url, { ...params }));
     };
 
     $axios.api = {
