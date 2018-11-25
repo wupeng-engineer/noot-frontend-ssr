@@ -149,7 +149,7 @@ export default {
                             }
                         });
                         this.$store.commit('setTagsList', tagsList);
-                        this.$router.push({ path: "/sys/home" })
+                        this.$router.push({ path: "/business/home" })
                     });
                   } else {
                     this.loading = false;

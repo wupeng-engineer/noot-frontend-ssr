@@ -1,5 +1,10 @@
 <template>
-    <span>Welcome !</span>
+    <div style="background:#eee;padding: 20px;">
+        <Card :bordered="false" style="min-height: 200px">
+            <p slot="title">欢迎使用违约查询系统</p>
+            <p>{{ `账户当前剩余积分: ${this.$store.state.user.info.record}` }}</p>
+        </Card>
+    </div>
 </template>
 
 <script>
