@@ -43,9 +43,6 @@
                             <Form-item style="margin-left:-35px;" class="br">
                               <Button @click="handleSearch" type="primary" icon="ios-search">搜索</Button>
                               <Button @click="handleReset" >重置</Button>
-                              <a class="drop-down" @click="dropDown">{{dropDownContent}}
-                                <Icon :type="dropDownIcon"></Icon>
-                              </a>
                             </Form-item>
                         </Form>
                     </Row>
