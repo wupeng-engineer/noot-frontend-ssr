@@ -12,9 +12,6 @@
                             <Form-item label="身份证号" prop="idcard">
                               <Input type="text" v-model="searchForm.idcard" placeholder="输入身份证号" style="width: 350px"/>
                             </Form-item>
-                            <Form-item label="电话号码" prop="phone">
-                              <Input type="text" v-model="searchForm.phone" clearable placeholder="请输入手机号" style="width: 200px"/>
-                            </Form-item>
                             <Form-item style="margin-left:-35px;" class="br">
                               <Button @click="handleSearch" type="primary" icon="ios-search">搜索</Button>
                             </Form-item>
@@ -248,14 +245,14 @@ export default {
     },
     changePage(v) {
       this.searchForm.pageNumber = v;
-      this.getUserList(false, false);
+      this.getUserList(false, false, false);
     },
     changePageSize(v) {
       this.searchForm.pageSize = v;
-      this.getUserList(false, false);
+      this.getUserList(false, false, false);
     },
-    getUserList(needRecord, showResult) {
-      if (!this.searchForm.realname && !this.searchForm.phone && !this.searchForm.idcard) {
+    getUserList(needRecord, showResult, checkCondition) {
+      if (!this.searchForm.realname && !this.searchForm.phone && !this.searchForm.idcard && checkCondition) {
           this.$Message.error('请输入搜索条件');
           return;
       }
@@ -283,7 +280,7 @@ export default {
     handleSearch() {
       this.searchForm.pageNumber = 1;
       this.searchForm.pageSize = 10;
-      this.getUserList(true, true);
+      this.getUserList(true, true, true);
     },
     handleReset() {
       this.$refs.searchForm.resetFields();
@@ -295,25 +292,12 @@ export default {
       this.selectDep = [];
       this.searchForm.departmentId = "";
     },
-    changeSort(e) {
-      this.searchForm.sort = e.key;
-      this.searchForm.order = e.order;
-      if (e.order === "normal") {
-        this.searchForm.order = "";
-      }
-      this.getUserList();
-    },
     getRoleList() {
       this.$axios.api.getAllRoleList().then(res => {
         if (res.message ===  'success') {
           this.roleList = res.data;
         }
       });
-    },
-    handleDropdown(name) {
-      if (name === "refresh") {
-        this.getUserList();
-      }
     },
     cancelUser() {
       this.userModalVisible = false;
