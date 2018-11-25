@@ -4,7 +4,7 @@
     <Alert type="error" show-icon v-if="error">{{errorMsg}}</Alert>
     <Row class="login-form" v-if="!socialLogining">
         <Row type="flex" justify="space-between" class="code-row-bg">
-            <h1 style="width: 100%; text-align:center; margin-bottom: 30px">违约数据查询系统</h1>
+            <h1 style="width: 100%; text-align:center; margin-bottom: 30px">中移在线抢单后台</h1>
         </Row>
           <Form ref="usernameLoginForm" :model="form" :rules="rules" class="form">
             <FormItem prop="username">

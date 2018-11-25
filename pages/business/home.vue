@@ -1,9 +1,23 @@
 <template>
     <div style="background:#eee;padding: 20px;">
-        <Card :bordered="false" style="min-height: 200px">
-            <p slot="title">欢迎使用违约查询系统</p>
-            <p>{{ `账户当前剩余积分: ${this.$store.state.user.info.record}` }}</p>
-            <p>{{ `当前系统违约记录总条数: ${this.total} 条` }}</p>
+        <Card :bordered="false" style="min-height: 100px">
+            <p slot="title">欢迎使用中移抢单系统</p>
+            <Row type="flex">
+                <Col><span>系统状态: </span><span>已关闭</span></Col>
+            </Row>
+        </Card>
+        <Card :bordered="false" style="min-height: 100px; margin-top: 20px">
+            <Row type="flex">
+                 <Form :model="formItem" :label-width="50" style="width: 100%">
+                    <FormItem label="sid">
+                        <Input v-model="formItem.input" placeholder="其输入sid"></Input>
+                    </FormItem>
+                    
+                    <FormItem>
+                        <Button type="primary">开始抢单</Button>
+                    </FormItem>
+                </Form>
+            </Row>
         </Card>
     </div>
 </template>
@@ -15,8 +29,18 @@ export default {
   name: "home",
   data() {
       return {
-          total: 0
-      }
+                formItem: {
+                    input: '',
+                    select: '',
+                    radio: 'male',
+                    checkbox: [],
+                    switch: true,
+                    date: '',
+                    time: '',
+                    slider: [20, 50],
+                    textarea: ''
+                }
+            }
   },
   components: {
     circleLoading,
