@@ -8,9 +8,6 @@
                             <Form-item label="用户名称" prop="username">
                               <Input type="text" v-model="searchForm.username" clearable placeholder="请输入用户名" style="width: 200px"/>
                             </Form-item>
-                            <Form-item label="部门" prop="department">
-                              <Cascader v-model="selectDep" :data="department" :load-data="loadData" @on-change="handleChangeDep" change-on-select filterable placeholder="请选择或输入搜索部门" style="width: 200px"></Cascader>
-                            </Form-item>
                             <span v-if="drop">
                             <Form-item label="手机号" prop="phone">
                               <Input type="text" v-model="searchForm.phone" clearable placeholder="请输入手机号" style="width: 200px"/>

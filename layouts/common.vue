@@ -30,10 +30,8 @@
                 <a href="javascript:void(0)">
                   <span class="main-user-name">{{ this.$store.state.user.info.username }}</span>
                   <Icon type="md-arrow-dropdown" />
-                  <Avatar :src="this.$store.state.user.info.avatar"></Avatar>
                 </a>
                 <DropdownMenu slot="list">
-                  <DropdownItem name="ownSpaceOld"> 用户中心 </DropdownItem>
                   <DropdownItem name="changePass"> 修改密码 </DropdownItem>
                   <DropdownItem name="loginout"> 退出登录 </DropdownItem>
                 </DropdownMenu>
