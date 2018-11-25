@@ -3,6 +3,7 @@
         <Card :bordered="false" style="min-height: 200px">
             <p slot="title">欢迎使用违约查询系统</p>
             <p>{{ `账户当前剩余积分: ${this.$store.state.user.info.record}` }}</p>
+            <p>{{ `当前系统违约记录总条数: ${this.total} 条` }}</p>
         </Card>
     </div>
 </template>
@@ -12,9 +13,21 @@ import circleLoading from "~/components/circle-loading.vue";
 export default {
   layout: 'permission',
   name: "home",
+  data() {
+      return {
+          total: 0
+      }
+  },
   components: {
     circleLoading,
   },
+  mounted() {
+      this.$axios.api.recordTotal().then(res => {
+          if (res.message === 'success') {
+              this.total = res.data;
+          }
+      })
+  }
 };
 </script>
 <style lang="less" scoped>

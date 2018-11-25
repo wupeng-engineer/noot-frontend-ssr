@@ -33,10 +33,10 @@
                         </Upload>
                     </Row>
                     <Row>
-                        <Table :loading="loading" border :columns="columns" :data="data" sortable="custom" @on-sort-change="changeSort" ref="table"></Table>
+                        <Table :loading="loading" border :columns="columns" :data="data" sortable="custom" ref="table"></Table>
                     </Row>
                     <Row type="flex" justify="end" class="page">
-                        <Page :current="searchForm.pageNumber" :total="total" :page-size="searchForm.pageSize" @on-change="changePage" @on-page-size-change="changePageSize" :page-size-opts="[10,20,50]" size="small" show-total show-elevator show-sizer></Page>
+                        <Page :current="searchForm.pageNumber" :total="total" :page-size="searchForm.pageSize" @on-change="changePage" @on-page-size-change="changePageSize" :page-size-opts="[10,20,50]" size="small" show-total show-elevator ></Page>
                     </Row>
                 </Card>
             </Col>

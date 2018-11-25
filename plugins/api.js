@@ -10,6 +10,9 @@ const commonApi = [{
 }, {
     url: '/api/v1/passport/token',
     method: 'POST'
+}, {
+    url: '/api/v1/business/record/total',
+    method: 'GET'
 }]
 export default function ({ $axios, store, route }) {
     function checkApiPathValid(url, method, func) {
@@ -183,6 +186,9 @@ export default function ({ $axios, store, route }) {
         },
         userRecordList: (params) => {
             return getRequest('/api/v1/business/user/record', params);
+        },
+        recordTotal: (params) => {
+            return getRequest('/api/v1/business/record/total', params);
         }
     }
 }
