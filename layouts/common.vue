@@ -70,6 +70,7 @@ export default {
     tagsPageOpened,
     breadcrumbNav,
   },
+
   data() {
     return {
       shrink: false,

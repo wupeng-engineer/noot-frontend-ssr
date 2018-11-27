@@ -65,7 +65,7 @@ export default {
     },
     methods: {
         handleChange (path) {
-            const currentPath = this.$route.path;
+            const currentPath = path;
             const breadcrumb = [];
             this.$store.state.user.menuList.forEach(menu => {
                 if (currentPath.indexOf(menu.path) !== -1) {
@@ -83,7 +83,6 @@ export default {
                                 path: item.path,
                                 name: item.name
                             });
-                            return;
                         }
                     })
                 }
@@ -91,6 +90,7 @@ export default {
             console.log(breadcrumb,'123123', path);
             this.$store.commit('setCurrentPath', breadcrumb);
             this.$router.push({ path });
+            this.$store.commit('setCurrentPageName', path);
         }
     },
     mounted() {
