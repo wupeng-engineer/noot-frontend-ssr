@@ -70,9 +70,6 @@ export default {
     tagsPageOpened,
     breadcrumbNav,
   },
-  beforeCreate() {
-      this.$store.commit('setCurrentPageName', this.$route.name);
-  },
   data() {
     return {
       shrink: false,
@@ -118,6 +115,12 @@ export default {
   },
   methods: {
     init() {
+        this.$axios.api.userInfo().then(res => {
+            if (Number(res.error_code) === 0 && res.result === 'Y') {
+                this.$store.commit('setInfo', res.data);
+                this.$router.push({ path: "/resource/home" })
+            }
+        });
       this.checkTag(this.$route.name);
     },
     toggleClick() {

@@ -88,7 +88,6 @@ util.openNewPage = function (vm, name, argu, query) {
             vm.$store.commit('increateTag', tag);
         }
     }
-    vm.$store.commit('setCurrentPageName', name);
 };
 
 util.toDefaultPage = function (routers, name, route, next) {

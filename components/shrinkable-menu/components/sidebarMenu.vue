@@ -1,20 +1,20 @@
 <template>
     <Menu ref="sideMenu" accordion :active-name="this.$store.state.app.currentPageName" :open-names="openMenuParentName" :theme="menuTheme" width="auto" @on-select="changeMenu">
         <template v-for="item in menuList">
-            <MenuItem v-if="item.children.length < 1" :name="item.children[0].name" :key="'menuitem' + item.name">
+            <MenuItem v-if="item.children.length < 1" :name="item.children[0].path" :key="'menuitem' + item.name">
                 <Icon :type="item.children[0].icon || item.icon" :size="iconSize" :key="'menuicon' + item.name"></Icon>
-                <span class="layout-text" :key="'title' + item.name">{{ itemTitle(item.children[0]) }}</span>
+                <span class="layout-text" :key="'title' + item.path">{{ itemTitle(item.children[0]) }}</span>
             </MenuItem>
 
-            <Submenu v-if="item.children.length >= 1" :name="item.name" :key="item.name">
+            <Submenu v-if="item.children.length >= 1" :name="item.path" :key="item.path">
                 <template slot="title">
                     <Icon :type="item.icon" :size="iconSize"></Icon>
                     <span class="layout-text">{{ itemTitle(item) }}</span>
                 </template>
                 <template v-for="child in item.children">
-                    <MenuItem :name="child.name" :key="'menuitem' + child.name">
-                        <Icon :type="child.icon" :size="iconSize" :key="'icon' + child.name"></Icon>
-                        <span class="layout-text" :key="'title' + child.name">{{ itemTitle(child) }}</span>
+                    <MenuItem :name="child.path" :key="'menuitem' + child.path">
+                        <Icon :type="child.icon" :size="iconSize" :key="'icon' + child.path"></Icon>
+                        <span class="layout-text" :key="'title' + child.path">{{ itemTitle(child) }}</span>
                     </MenuItem>
                 </template>
             </Submenu>
@@ -35,21 +35,22 @@ export default {
   },
   computed: {
      openMenuParentName: function() {
-         let name = "sys";
+         let path = "resource";
          this.$store.state.user.menuList.forEach(menu => {
              if (menu.children.length) {
                  menu.children.forEach(item => {
                      if (item.path === this.$route.path) {
-                         name = menu.name;
+                         path = menu.path;
                      }
                  })
              }
          })
-         return [name];
+         return [path];
      }
   },
   methods: {
     changeMenu(active) {
+        console.log(active);
       this.$emit("on-change", active);
     },
     itemTitle(item) {
@@ -73,12 +74,9 @@ export default {
     });
   },
   watch: {
-    // 监听路由变化
     $route(to, from) {
     }
   },
-  mounted() {
-  }
 };
 </script>
 

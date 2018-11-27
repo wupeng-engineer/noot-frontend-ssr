@@ -64,21 +64,37 @@ export default {
         }
     },
     methods: {
-        handleChange (name) {
-            // 找到name对应的path
-            let path = '/404';
+        handleChange (path) {
+            const currentPath = this.$route.path;
+            const breadcrumb = [];
             this.$store.state.user.menuList.forEach(menu => {
+                if (currentPath.indexOf(menu.path) !== -1) {
+                    breadcrumb.push({
+                        title: menu.title,
+                        path: menu.path,
+                        name: menu.name
+                    });
+                }
                 if (menu.children.length) {
                     menu.children.forEach(item => {
-                        if (item.name === name) {
-                            path = item.path;
+                        if (item.path === currentPath) {
+                            breadcrumb.push({
+                                title: item.title,
+                                path: item.path,
+                                name: item.name
+                            });
                             return;
                         }
                     })
                 }
             })
+            console.log(breadcrumb,'123123', path);
+            this.$store.commit('setCurrentPath', breadcrumb);
             this.$router.push({ path });
         }
+    },
+    mounted() {
+        this.handleChange(this.$route.path);
     }
 };
 </script>

@@ -7,19 +7,35 @@ const user = {
         menuList: [{
             id: '1',
             title: '资源管理',
-            name: 'resource-manage',
+            name: 'resource',
+            path: 'resource',
             icon: 'md-settings',
             children: [{
                 id: '1.1',
                 title: '首页',
                 name: 'resource-home',
                 icon: 'md-home',
+                path: '/resource/home'
             },{
                 id: '1.2',
                 title: '图片上传',
-                name: 'resource-upload',
+                name: 'resource-image',
                 icon: 'md-images',
+                path: '/resource/image'
             }]
+        }, {
+                id: '2',
+                title: '内容管理',
+                name: 'article',
+                path: 'article',
+                icon: 'md-images',
+                children: [{
+                    id: '2.2',
+                    title: '文章',
+                    name: 'resource-image',
+                    path: '/article/list',
+                    icon: 'md-images',
+                }],
         }],
         tokenValid: true,
         whiteApiList: [],
