@@ -1,198 +1,133 @@
 <template>
-  <Row type="flex" justify="center" align="middle" class="login" @keydown.enter.native="submitLogin">
-    <Col :xs="{span:22}" style="width: 368px;">
-    <Alert type="error" show-icon v-if="error">{{errorMsg}}</Alert>
-  
-    <Row class="login-form" v-if="!socialLogining">
-          <Form ref="usernameLoginForm" :model="form" :rules="rules" class="form">
-            <FormItem prop="username">
-              <Input v-model="form.username" prefix="ios-contact" size="large" clearable placeholder="请输入用户名" autocomplete="off" />
-            </FormItem>
-            <FormItem prop="password">
-              <Input type="password" v-model="form.password" prefix="ios-lock" size="large" clearable placeholder="请输入密码" autocomplete="off" />
-            </FormItem>
-          </Form>
-      <Row type="flex" justify="space-between" class="code-row-bg">
-        <Checkbox v-model="saveLogin" size="large">自动登录</Checkbox>
-      </Row>
-      <Row>
-        <Button class="login-btn" type="primary" size="large" :loading="loading" @click="submitLogin" long>
-                            <span v-if="!loading">登录</span>
-                            <span v-else>登录中...</span>
-                        </Button>
-      </Row>
+    <Row type="flex" justify="center" align="middle" class="login" @keydown.enter.native="submitLogin">
+        <Col :xs="{span:22}" style="width: 368px;">
+            <Alert type="error" show-icon v-if="error">{{errorMsg}}</Alert>
+            <Row class="login-form" v-if="!socialLogining">
+                <Form ref="usernameLoginForm" :model="form" :rules="rules" class="form">
+                    <FormItem prop="username">
+                        <Input v-model="form.username" prefix="ios-contact" size="large" clearable placeholder="请输入用户名" autocomplete="off" />
+                    </FormItem>
+                    <FormItem prop="password">
+                        <Input type="password" v-model="form.password" prefix="ios-lock" size="large" clearable placeholder="请输入密码" autocomplete="off" />
+                    </FormItem>
+                    <FormItem prop="code">
+                        <Input style="width: 70%" type="text" v-model="form.code" prefix="ios-code" size="large" clearable placeholder="验证码" autocomplete="off" />
+                        <div class="code-wrap" @click="this.changeCode"><img :src="codeUrl"/></div>
+                    </FormItem>
+                </Form>
+                <Row>
+                    <Button class="login-btn" type="primary" size="large" :loading="loading" @click="submitLogin" long>
+                        <span v-if="!loading">登录</span>
+                        <span v-else>登录中...</span>
+                    </Button>
+                </Row>
+            </Row>
+        </Col>
     </Row>
-    </Col>
-  </Row>
 </template>
 
 <script>
 import Cookies from "js-cookie";
 import util from '~/libs/util';
 export default {
-  data() {
-    const validatephone = (rule, value, callback) => {
-      var reg = /^[1][3,4,5,7,8][0-9]{9}$/;
-      if (!reg.test(value)) {
-        callback(new Error("手机号格式错误"));
-      } else {
-        callback();
-      }
-    };
-    return {
-      socialLogining: false,
-      error: false,
-      errorMsg: "",
-      tabName: "username",
-      saveLogin: true,
-      loading: false,
-      sending: false,
-      sended: false,
-      count: 60,
-      countButton: "60 s",
-      maxLength: 6,
-      errorCode: "",
-      form: {
-        username: "",
-        password: "",
-        phone: "",
-        code: ""
-      },
-      rules: {
-        username: [
-          {
-            required: true,
-            message: "账号不能为空",
-            trigger: "blur"
-          }
-        ],
-        password: [
-          {
-            required: true,
-            message: "密码不能为空",
-            trigger: "blur"
-          }
-        ],
-        phone: [
-          {
-            required: true,
-            message: "手机号不能为空",
-            trigger: "blur"
-          },
-          {
-            validator: validatephone,
-            trigger: "blur"
-          }
-        ]
-      }
-    };
-  },
-  methods: {
+    data() {
+        return {
+            codeUrl: '',
+            socialLogining: false,
+            error: false,
+            errorMsg: "",
+            tabName: "username",
+            saveLogin: true,
+            loading: false,
+            sending: false,
+            sended: false,
+            maxLength: 6,
+            errorCode: "",
+            form: {
+                username: "",
+                password: "",
+                code: ""
+            },
+            rules: {
+                username: [{
+                    required: true,
+                    message: "账号不能为空",
+                    trigger: "blur"
+                }], password: [{
+                    required: true,
+                    message: "密码不能为空",
+                    trigger: "blur"
+                }], code: [{
+                    required: true,
+                    message: "验证码不能为空",
+                    trigger: "blur"
+                }]
+            }
+        };
+    },
+    mounted() {
+        this.init();
+    },
+    methods: {
+        init() {
+            this.changeCode()
+        },
+        changeCode() {
+            this.$axios.api.code().then(res => {
+                return 'data:image/png;base64,' + btoa(
+                    new Uint8Array(res).reduce((data, byte) => data + String.fromCharCode(byte), '')
+                );
+            }).then(data => {
+                this.codeUrl = data;
+            })
+        },
     showErrorMsg(msg) {
-      this.error = true;
-      this.errorMsg = msg;
-    },
-    sendVerify() {
-      this.$refs.phoneLoginForm.validate(valid => {
-        if (valid) {
-          this.showErrorMsg("请捐赠获取完整版")
-        }
-      });
-    },
-    countDown() {
-      let that = this;
-      if (this.count === 0) {
-        this.sended = false;
-        this.count = 60;
-        return;
-      } else {
-        this.countButton = this.count + " s";
-        this.count--;
-      }
-      setTimeout(function() {
-        that.countDown();
-      }, 1000);
+        this.error = true;
+        this.errorMsg = msg;
     },
     submitLogin() {
-      if (this.tabName === "username") {
         this.$refs.usernameLoginForm.validate(valid => {
-          if (valid) {
-            this.loading = true;
-            this.$axios.api.login({
-              username: this.form.username,
-              password: this.form.password,
-              saveLogin: this.saveLogin
-            }).then(res => {
-              if (res.message === 'success') {
-                this.$store.commit("setToken", res.data.access_token);
-                if (this.saveLogin) {
-                    Cookies.set("access_token", res.data.access_token, {
-                      expires: 7
-                    });
-                }
-                // 获取用户信息
-                this.$axios.api.userInfo().then(res => {
-                  if (res.message ===  'success') {
-                    this.$store.commit('setInfo', res.data);
-                    this.$axios.api.getMenuList().then(res => {
-                        let menuData = res.data || [];
-                        const constRoutes = [];
-                        util.initRouterNode(constRoutes, menuData);
-                        this.$store.commit('setMenulist', constRoutes.filter(item => item.children.length > 0));
-
-                        let tagsList = [];
-                        this.$store.state.app.routers.map((item) => {
-                            if (item.children.length <= 1) {
-                                tagsList.push(item.children[0]);
-                            } else {
-                                tagsList.push(...item.children);
+            if (valid) {
+                this.loading = true;
+                this.$axios.api.login({
+                    username: this.form.username,
+                    password: this.form.password,
+                    auth_code: this.form.code,
+                }).then(res => {
+                    if (Number(res.error_code) === 0 && res.result === 'Y') {
+                        this.$axios.api.userInfo().then(res => {
+                            if (Number(res.error_code) === 0 && res.result === 'Y') {
+                                this.$store.commit('setInfo', res.data);
+                                this.$router.push({ path: "/sys/home" })
                             }
                         });
-                        this.$store.commit('setTagsList', tagsList);
-                        this.$router.push({ path: "/sys/home" })
-                    });
-                  } else {
-                    this.loading = false;
-                  }
+                    } else {
+                        this.loading = false;
+                    }
                 });
-              } else {
+            } else {
                 this.loading = false;
-              }
-            });
-          }
+            }
         });
-      }
-    },
-    handleDropDown(v) {
-      if (v == "showAccount") {
-        this.showAccount();
-      } else if (v == "resetByphone") {
-        this.showErrorMsg("请捐赠获取完整版")
-      } else if (v == "resetByEmail") {
-        this.showErrorMsg("请捐赠获取完整版")
-      }
-    },
+    }
   },
 };
 </script>
 
 <style lang="less" scoped>
     .login {
-    height: 100vh;
-    background: url('~assets/background.svg');
-    .header {
-        margin-top: 9vh;
-        margin-bottom: 6vh;
-        text-align: center;
-        .description {
-            font-size: 14px;
-            color: rgba(0, 0, 0, .45);
-            margin-top: 1vh;
+        height: 100vh;
+        background: url('~assets/background.svg');
+        .login-form {
+            margin-bottom: 16vh;
         }
-    }
-    .login-form {
-        margin-bottom: 16vh;
-    }
+        .code-wrap {
+            float: right;
+            display: flex;
+            align-items: center;
+            height: 35px;
+            cursor: pointer;
+        }
     .ivu-tabs-nav-container {
         line-height: 2;
         font-size: 17px;

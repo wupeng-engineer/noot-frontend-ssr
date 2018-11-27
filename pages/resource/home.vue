@@ -5,11 +5,11 @@
 <script>
 import circleLoading from "~/components/circle-loading.vue";
 export default {
-  layout: 'permission',
-  name: "home",
-  components: {
-    circleLoading,
-  },
+    layout: 'common',
+    name: "home",
+    components: {
+        circleLoading,
+    },
 };
 </script>
 <style lang="less" scoped>

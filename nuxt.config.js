@@ -1,7 +1,7 @@
 const pkg = require('./package')
 
 module.exports = {
-    mode: 'universal',
+    mode: 'spa',
 
     /*
     ** Headers of the page
@@ -49,11 +49,11 @@ module.exports = {
     ** Axios module configuration
     */
     axios: {
-        baseURL: 'http://localhost:7001',
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-        },
+        proxy: true,
         // See https://github.com/nuxt-community/axios-module#options
+    },
+    proxy: {
+        "/cmsserver/**": 'https://pc.assetfort.com:8099',
     },
 
     /*

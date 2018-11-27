@@ -25,6 +25,7 @@
     "less": "^3.8.1",
     "less-loader": "^4.1.0",
     "nuxt": "^2.0.0",
+    "query-string": "^6.2.0",
     "vue-i18n": "^8.3.1"
   },
   "devDependencies": {

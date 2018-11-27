@@ -1,5 +1,7 @@
 import { Message } from 'iview';
 import urlCompare from 'path-to-regexp'
+import { getStore, setStore } from '~/libs/storage'
+import qs from 'query-string'
 
 const commonApi = [{
     url: '/api/v1/account/info'
@@ -7,59 +9,38 @@ const commonApi = [{
     url: '/api/v1/permission/menu'
 }]
 export default function ({ $axios, store, route }) {
-    function checkApiPathValid(url, func) {
-        let flag = false;
-        store.state.user.whiteApiList.concat(commonApi).forEach(item => {
-            const parse = urlCompare(item.url);
-            if (parse.exec(url)) {
-                flag = true;
-            }
-        })
-        if (flag) {
-            return Promise.resolve(func)
-        } else {
-            const message = `无此操作权限,请联系管理员开启权限`;
-            if (typeof window !== 'undefined') {
-                Message.error(message);
-            }
-            return Promise.reject({ message });
-        }
-    }
+    const did = getStore('did')
+    if (!did) { setStore('did', (new Date()).valueOf()) } $axios.defaults.headers.common['x-af-did'] = getStore('did');
+    $axios.defaults.headers.common['x-af-lang'] = getStore('lang') || 'zh-cn';
+
     $axios.defaults.timeout = 15000;
     const getRequest = (url, params) => {
-        const token = store.state.user.token;
-        $axios.defaults.headers.get['Content-Type'] = 'application/json';
-        $axios.defaults.headers.get['Authorization'] = `Bearer ${token}`;
-        return checkApiPathValid(url, $axios.get(url, { params: { ...params }}));
+        return $axios.get(url, { ...params });
     };
-
     const postRequest = (url, params) => {
-        const token = store.state.user.token;
-        $axios.defaults.headers.post['Content-Type'] = 'application/json';
-        $axios.defaults.headers.post['Authorization'] = `Bearer ${token}`;
-        return $axios.post(url, { ...params });
+        return $axios.post(url, qs.stringify(params), {headers: { 'Content-Type': 'application/x-www-form-urlencoded' }});
     };
 
     const putRequest = (url, params) => {
-        const token = store.state.user.token;
-        $axios.defaults.headers.put['Content-Type'] = 'application/json';
-        $axios.defaults.headers.put['Authorization'] = `Bearer ${token}`;
         return $axios.put(url, { ...params });
     };
 
     const deleteRequest = (url, params) => {
-        const token = store.state.user.token;
-        $axios.defaults.headers.delete['Content-Type'] = 'application/json';
-        $axios.defaults.headers.delete['Authorization'] = `Bearer ${token}`;
         return $axios.delete(url, { ...params });
     };
+    $axios.url = {
+        codeUrl: 'https://pc.assetfort.com:8099/cmsserver/getAuthCodePic'
+    }
 
     $axios.api = {
+        code: () => {
+            return getRequest('/cmsserver/getAuthCodePic', { responseType: 'arraybuffer' })
+        },
         login: (params) => {
-            return postRequest('/api/v1/passport/token', params)
+            return postRequest('/cmsserver/login', params)
         },
         userInfo: (params) => {
-            return getRequest('/api/v1/account/info', params)
+            return postRequest('/cmsserver/getUserInfo', params)
         },
         regist: (params) => {
             return postRequest('/api/v1/account/register', params)

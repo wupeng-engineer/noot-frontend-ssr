@@ -4,7 +4,23 @@ const user = {
     state: {
         info: {},
         token: '',
-        menuList: [],
+        menuList: [{
+            id: '1',
+            title: '资源管理',
+            name: 'resource-manage',
+            icon: 'md-settings',
+            children: [{
+                id: '1.1',
+                title: '首页',
+                name: 'resource-home',
+                icon: 'md-home',
+            },{
+                id: '1.2',
+                title: '图片上传',
+                name: 'resource-upload',
+                icon: 'md-images',
+            }]
+        }],
         tokenValid: true,
         whiteApiList: [],
         fetchedMenu: false,
