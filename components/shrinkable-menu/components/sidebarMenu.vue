@@ -50,7 +50,6 @@ export default {
   },
   methods: {
     changeMenu(active) {
-        console.log(active);
       this.$emit("on-change", active);
     },
     itemTitle(item) {
@@ -75,6 +74,7 @@ export default {
   },
   watch: {
     $route(to, from) {
+        this.$emit("on-change", to.path);
     }
   },
 };

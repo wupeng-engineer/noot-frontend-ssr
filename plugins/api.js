@@ -42,8 +42,8 @@ export default function ({ $axios, store, route }) {
         userInfo: (params) => {
             return postRequest('/cmsserver/getUserInfo', params)
         },
-        regist: (params) => {
-            return postRequest('/api/v1/account/register', params)
+        imageList: (params) => {
+            return postRequest('/cmsserver/getImageList', params)
         },
         initCaptcha: (params) => {
             return getRequest('/api/v1/common/captcha/init', params)

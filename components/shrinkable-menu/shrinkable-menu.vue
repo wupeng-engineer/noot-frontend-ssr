@@ -87,10 +87,9 @@ export default {
                     })
                 }
             })
-            console.log(breadcrumb,'123123', path);
             this.$store.commit('setCurrentPath', breadcrumb);
-            this.$router.push({ path });
             this.$store.commit('setCurrentPageName', path);
+            this.$router.push({ path });
         }
     },
     mounted() {

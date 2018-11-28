@@ -98,7 +98,7 @@ export default {
                         this.$axios.api.userInfo().then(res => {
                             if (Number(res.error_code) === 0 && res.result === 'Y') {
                                 this.$store.commit('setInfo', res.data);
-                                this.$router.push({ path: "/sys/home" })
+                                this.$router.push({ path: "/resource/home" })
                             }
                         });
                     } else {

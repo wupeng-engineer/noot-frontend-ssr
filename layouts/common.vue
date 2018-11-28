@@ -1,15 +1,16 @@
 <template>
-  <div class="main" :class="{'main-hide-text': shrink}">
+<div>
+  <div class="main" :class="{'main-hide-text': shrink}" v-if="!this.loading">
     <div class="sidebar-menu-con menu-bar" :style="{width: shrink?'60px':'220px', overflow: shrink ? 'visible' : 'auto'}">
-      <shrinkable-menu :shrink="shrink" @on-change="handleSubmenuChange" :theme="menuTheme" :before-push="beforePush" :open-names="openedSubmenuArr" :menu-list="menuList">
+      <shrinkable-menu :shrink="shrink" :menu-list="menuList">
       </shrinkable-menu>
     </div>
     <div class="main-header-con" :style="{paddingLeft: shrink?'60px':'220px'}">
       <div class="main-header">
         <div class="navicon-con">
           <Button :style="{transform: 'rotateZ(' + (this.shrink ? '-90' : '0') + 'deg)'}" type="text" @click="toggleClick">
-                          <Icon type="md-menu" size="32"></Icon>
-                      </Button>
+            <Icon type="md-menu" size="32"></Icon>
+          </Button>
         </div>
         <div class="header-middle-con">
           <div class="main-breadcrumb">
@@ -17,24 +18,14 @@
           </div>
         </div>
         <div class="header-avator-con">
-          <Dropdown @on-click="handleLanDropdown" class="options">
-            <Icon type="md-globe" :size="24" class="language"></Icon>
-            <DropdownMenu slot="list">
-              <DropdownItem name="zh-CN">中文</DropdownItem>
-              <DropdownItem name="en-US">English</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
           <div class="user-dropdown-menu-con">
             <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
               <Dropdown transfer trigger="hover" @on-click="handleClickUserDropdown">
                 <a href="javascript:void(0)">
                   <span class="main-user-name">{{ this.$store.state.user.info.user_name }}</span>
                   <Icon type="md-arrow-dropdown" />
-                  <Avatar :src="this.$store.state.user.info.avatar"></Avatar>
                 </a>
                 <DropdownMenu slot="list">
-                  <DropdownItem name="ownSpaceOld"> 用户中心 </DropdownItem>
-                  <DropdownItem name="changePass"> 修改密码 </DropdownItem>
                   <DropdownItem name="loginout"> 退出登录 </DropdownItem>
                 </DropdownMenu>
               </Dropdown>
@@ -48,12 +39,12 @@
     </div>
     <div class="single-page-con" :style="{left: shrink?'60px':'220px'}">
       <div class="single-page">
-        <keep-alive :include="cachePage">
-          <nuxt></nuxt>
-        </keep-alive>
+        <nuxt></nuxt>
       </div>
     </div>
   </div>
+    <Spin v-if="this.loading" fix size="large"></Spin>
+</div>
 </template>
 
 <script>
@@ -73,11 +64,10 @@ export default {
 
   data() {
     return {
-      shrink: false,
-      username: "",
-      userId: "",
-      isFullScreen: false,
-      openedSubmenuArr: this.$store.state.app.openedSubmenuArr
+        loading: true,
+        shrink: false,
+        username: "",
+        userId: "",
     };
   },
   computed: {
@@ -93,21 +83,6 @@ export default {
     currentPath() {
       return this.$store.state.app.currentPath; // 当前面包屑数组
     },
-    avatarPath() {
-      return localStorage.avatorImgPath;
-    },
-    cachePage() {
-      return this.$store.state.app.cachePage;
-    },
-    lang() {
-      return this.$store.state.app.lang;
-    },
-    menuTheme() {
-      return this.$store.state.app.menuTheme;
-    },
-    mesCount() {
-      return this.$store.state.app.messageCount;
-    }
   },
   stompClient: {
     monitorIntervalTime: 100,
@@ -116,68 +91,30 @@ export default {
   },
   methods: {
     init() {
+        this.loading = true;
         this.$axios.api.userInfo().then(res => {
             if (Number(res.error_code) === 0 && res.result === 'Y') {
                 this.$store.commit('setInfo', res.data);
-                this.$router.push({ path: "/resource/home" })
+                this.loading = false;
+            } else {
+                this.$router.push({ path: '/login' });
             }
         });
-      this.checkTag(this.$route.name);
     },
     toggleClick() {
       this.shrink = !this.shrink;
     },
-    handleLanDropdown(name) {
-      localStorage.lang = name;
-      this.$store.commit("switchLang", name);
-    },
     handleClickUserDropdown(name) {
-        if (name === 'changePass') {
-            this.$router.push({ path: '/setting/password-reset' })
-        } else if (name === "ownSpace") {
-          this.$router.push({
-            name: "ownspace_index"
-          });
-        } else if (name === "ownSpaceOld") {
-          this.$router.push({
-            name: "ownspace_old"
-          });
-        } else if (name === "loginout") {
+        if (name === "loginout") {
           // 退出登录
           this.$store.commit("logout");
           // 强制刷新页面 重新加载router
           this.$router.push({ path: '/login'})
         }
     },
-    checkTag(name) {
-      let openpageHasTag = this.pageTagsList.some(item => {
-        if (item.name === name) {
-          return true;
-        }
-      });
-      if (!openpageHasTag) {
-        //  解决关闭当前标签后再点击回退按钮会退到当前页时没有标签的问题
-        util.openNewPage(
-          this,
-          name,
-          this.$route.params || {},
-          this.$route.query || {}
-        );
-      }
-    },
-    handleSubmenuChange(val) {
-      // console.log(val)
-    },
-    beforePush(name) {
-      // console.log(name)
-      return true;
-    },
-    fullscreenChange(isFullScreen) {
-      // console.log(isFullScreen);
-    }
   },
-  mounted() {
-    this.init();
+  created() {
+      this.init();
   },
 };
 </script>
