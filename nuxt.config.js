@@ -36,6 +36,8 @@ module.exports = {
         src: '~/plugins/axios.js', ssr: true
     }, {
         src: '~/plugins/route.js', ssr: true
+    }, {
+        src: '~/plugins/codemirror.js', ssr: true
     }],
 
     /*
