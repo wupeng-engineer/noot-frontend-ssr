@@ -1,5 +1,7 @@
 # admin-frontend
-
+![avatar](https://github.com/bugall/noot-frontend-ssr/blob/master/doc/img/WechatIMG16.jpeg)
+![avatar](https://github.com/bugall/noot-frontend-ssr/blob/master/doc/img/WechatIMG17.jpeg)
+![avatar](https://github.com/bugall/noot-frontend-ssr/blob/master/doc/img/WechatIMG18.jpeg)
 > My beautiful Nuxt.js project
 
 ## Build Setup
