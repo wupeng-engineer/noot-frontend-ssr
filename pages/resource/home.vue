@@ -1,55 +1,16 @@
 <template>
-<!-- advanced -->
-<codemirror
-  :value="code"
-  :options="this.options"
-  ref="myEditor"
-  @change="yourCodeChangeMethod">
-</codemirror>
+    <span>Welcome !</span>
 </template>
 
 <script>
-import { codemirror } from 'vue-codemirror-lite'
-  require('codemirror/mode/javascript/javascript')
-  require('codemirror/mode/vue/vue')
-
-  require('codemirror/addon/hint/show-hint.js')
-  require('codemirror/addon/hint/show-hint.css')
-  require('codemirror/addon/hint/javascript-hint.js')
+import circleLoading from "~/components/circle-loading.vue";
 export default {
+    layout: 'common',
+    name: "home",
     components: {
-        codemirror
+        circleLoading,
     },
-  data () {
-    return {
-      code: 'const str = "hello world"',
-      options: {
-        tabSize: 2,
-        mode: {
-            name: 'javascript',
-            json: true,
-        },
-        lineNumbers: true,
-        line: true,
-        highlightDifferences: true
-      }
-    }
-  },
-  methods: {
-    yourCodeChangeMethod(value) {
-        console.log(value);
-    },
-    
-  },
-  computed: {
-    editor() {
-      // get current editor object
-      return this.$refs.myEditor.editor
-    }
-  },
-  mounted() {
-    // use editor object...
-  }
-}
+};
 </script>
-
+<style lang="less" scoped>
+</style>

@@ -45,6 +45,12 @@ export default function ({ $axios, store, route }) {
         imageList: (params) => {
             return postRequest('/cmsserver/getImageList', params)
         },
+        articleList: (params) => {
+            return postRequest('/cmsserver/getArticleList', params)
+        },
+        deleteArticle: (params) => {
+            return postRequest('/cmsserver/saveArticleInfo', params)
+        },
         initCaptcha: (params) => {
             return getRequest('/api/v1/common/captcha/init', params)
         },
